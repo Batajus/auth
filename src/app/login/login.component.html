@@ -1,0 +1,53 @@
+<div>
+
+    <form (ngSubmit)="login()" [formGroup]="formGroup">
+
+        <div>
+            <mat-card>
+
+                <mat-card-header>
+                    <mat-card-title>Login</mat-card-title>
+                </mat-card-header>
+
+                <mat-card-content>
+
+                    <div>
+                        <mat-form-field *ngIf="formGroup.controls?.username as username">
+                            <mat-label>Username</mat-label>
+                            <input matInput placeholder="Username" [formControl]="username">
+                            <mat-error *ngIf="username.hasError('required')">The username is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <mat-form-field *ngIf="formGroup.controls?.password as password">
+                            <mat-label>Password</mat-label>
+                            <input matInput type="password" placeholder="Password" [formControl]="password">
+                            <mat-error *ngIf="password.hasError('required')">The password is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="login-not-successful" *ngIf="failedLogin">
+                        Your username or password is wrong
+                    </div>
+
+                    <div class="registration-link">
+                        If you're not signed in, you can register <a routerLink="/registration">here</a>.
+                    </div>
+
+                </mat-card-content>
+
+                <mat-card-actions>
+                    <button mat-raised-button *ngIf="!inLoginProcess; else loading">Login</button>
+                </mat-card-actions>
+
+            </mat-card>
+        </div>
+    </form>
+
+</div>
+
+<ng-template #loading>
+    <mat-progress-spinner color="primary" diameter="36" mode="indeterminate">
+    </mat-progress-spinner>
+</ng-template>
