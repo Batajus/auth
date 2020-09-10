@@ -1,31 +1,37 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+    FormGroup,
+    Validators,
+    FormBuilder,
+} from '@angular/forms';
 
 @Component({
     selector: 'registration-component',
-    templateUrl: 'registration.component.html'
+    templateUrl: 'registration.component.html',
 })
 export class RegistrationComponent implements OnInit {
+    formGroup: FormGroup;
 
-    fgUsername: FormGroup;
-    fgMail: FormGroup;
-    fgPassword: FormGroup;
-
-    constructor(){}
+    constructor(private fb: FormBuilder) {}
 
     ngOnInit() {
         this.initFormGroups();
     }
 
-
-    private initFormGroups(){
-        this.fgUsername = new FormGroup({
-            username: new FormControl('', Validators.required)
-        })
-
-        this.fgMail = new FormGroup({
-            mail: new FormControl('', Validators.required)
-        })
+    submit(): Promise<void> {
+        // TODO: Implement registration logic
+        return Promise.resolve();
     }
-    
+
+    private initFormGroups() {
+        this.formGroup = this.fb.group({
+            user: this.fb.group({
+                username: ['user', Validators.required],
+                password: ['user', Validators.required],
+            }),
+            mail: this.fb.group({
+                email: ['user@user.user', Validators.email],
+            }),
+        });
+    }
 }
