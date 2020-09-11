@@ -1,0 +1,32 @@
+.centered-container {
+    mat-card {
+        width: 400px;
+    }
+
+    mat-vertical-stepper {
+        width: 400px;
+    }
+}
+
+.registration-header {
+    width: 100%;
+
+    div {
+        padding: 0 32px 8px 32px;
+
+        &.title {
+            font-size: 20px;
+            font-weight: 500;
+
+            text-decoration: underline;
+        }
+
+        &.subtitle {
+            font-size: 14px;
+
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+}

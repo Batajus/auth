@@ -8,6 +8,7 @@ import {
 @Component({
     selector: 'registration-component',
     templateUrl: 'registration.component.html',
+    styleUrls: ['../login/login.component.scss', 'registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
     formGroup: FormGroup;
