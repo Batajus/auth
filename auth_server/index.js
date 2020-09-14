@@ -5,8 +5,12 @@ const bodyParser = require('body-parser');
 const base64url = require('base64url');
 const crypto = require('crypto');
 
+const db = require('./src/db');
+const User = require('./src/schemas/user');
+
 const PORT = 8080;
 const ALGORITHM = 'HS256';
+const ITERATIONS = 10000;
 
 if (!process.env.JWT_SECRET) {
     throw new Error('MISSING_JWT_SECRET');
@@ -17,26 +21,70 @@ app.use(cors());
 // Required! Otherwise the body of requests is empty
 app.use(bodyParser.json());
 
+/**
+ *
+ */
 app.post('/login', (req, res) => {
     if (!req.body || !Object.keys(req.body).length) {
         return res.sendStatus(500);
     }
 
-    // TODO user authentication against DB
+    User.findOne({ username: req.body.username }).exec(function (err, user) {
+        const hash = crypto.pbkdf2Sync(
+            req.body.password,
+            user.salt,
+            ITERATIONS,
+            256,
+            'sha256'
+        );
+        if (Buffer.compare(hash, user.password) != 0) {
+            return res.sendStatus(403);
+        }
 
-    const jwt = generateJWT(req.username);
-
-    res.send({ jwt });
+        const jwt = generateJWT(req.body.username);
+        res.send({ id: user._id, jwt });
+    });
 });
 
+/**
+ *
+ */
 app.post('/registration', (req, res) => {
     if (!req.body || !Object.keys(req.body).length) {
         return res.sendStatus(500);
     }
 
-    res.send({id: 1, jwt: ''})
+    const salt = crypto.randomBytes(256).toString('base64');
+    const password = crypto.pbkdf2Sync(
+        req.body.password,
+        salt,
+        ITERATIONS,
+        256,
+        'sha256'
+    );
+
+    const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password,
+        salt
+    });
+
+    user.save(function (err) {
+        if (err) {
+            console.error(err);
+            return res.sendStatus(500);
+        }
+
+        const jwt = generateJWT(user.username);
+
+        res.send({ id: user._id, jwt });
+    });
 });
 
+/**
+ *
+ */
 app.listen(PORT, () => {
     console.log(`Server started at http://localhost:${PORT}`);
 });
