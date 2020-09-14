@@ -7,8 +7,10 @@ const crypto = require("crypto");
 
 const PORT = 8080;
 const ALGORITHM = "HS256";
-const SECRET =
-  "52e73b2130d8d35e414d415228597491bb0619e0cc409fb886f69cadad47668c9f48e53359abf71466b64d8d9d3eff969112669d6045bb4fa77a185b3bdefc51";
+
+if (!process.env.JWT_SECRET){
+    throw new Error('MISSING_JWT_SECRET');
+}
 
 app.use(cors());
 
@@ -70,7 +72,7 @@ function generateJWT(username) {
   )}`;
 
   const signature = crypto
-    .createHmac("sha256", SECRET)
+    .createHmac("sha256", process.env.JWT_SECRET)
     .update(preSignature)
     .digest("hex");
 
@@ -109,7 +111,7 @@ function validateJWT(jwt) {
   }
 
   const checkSignature = crypto
-    .createHmac("sha256", SECRET)
+    .createHmac("sha256", process.env.JWT_SECRET)
     .update(`${header}.${payload}`)
     .digest("hex");
 
