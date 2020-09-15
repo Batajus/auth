@@ -19,8 +19,12 @@ export class AuthService {
                     password
                 })
                 .subscribe(
-                    (response: { jwt: string }) => {
-                        this.user = new User(username, response.jwt);
+                    (response: User) => {
+                        this.user = new User();
+                        Object.assign(this.user, response);
+
+                        localStorage.setItem('JWT', this.user.jwt);
+
                         s.next(true);
                     },
                     (err) => {
@@ -31,7 +35,7 @@ export class AuthService {
         });
     }
 
-    register(user: User) {
+    register(user: User): Observable<boolean> {
         return new Observable((s) => {
             return this.http
                 .post(`${this.url}/registration`, {
@@ -44,6 +48,9 @@ export class AuthService {
                         this.user = user;
                         user.id = response.id;
                         user.jwt = response.jwt;
+
+                        localStorage.setItem('JWT', this.user.jwt);
+
                         s.next(true);
                     },
                     (err) => {
@@ -63,8 +70,8 @@ export class User {
     id: string;
     jwt: string;
     constructor(
-        public username: string,
-        public email: string,
+        public username: string = null,
+        public email: string = null,
         public password: string = null
     ) {}
 }

@@ -42,7 +42,12 @@ app.post('/login', (req, res) => {
         }
 
         const jwt = generateJWT(req.body.username);
-        res.send({ id: user._id, jwt });
+        res.send({
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            jwt
+        });
     });
 });
 

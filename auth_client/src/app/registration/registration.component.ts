@@ -7,6 +7,7 @@ import {
     AbstractControl
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { AuthService, User } from '../auth/auth.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class RegistrationComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private auth: AuthService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -28,6 +30,10 @@ export class RegistrationComponent implements OnInit {
     }
 
     submit() {
+        if (!this.formGroup.valid) {
+            return;
+        }
+
         const { user, mail } = this.formGroup.value;
         const newUser = new User(user.username, mail.email, user.password);
 
@@ -37,10 +43,15 @@ export class RegistrationComponent implements OnInit {
                 return;
             }
 
-            // TODO Navigate to respective page
-            this.snackBar.open("You've successfully created an account.", null, {
-                duration: 1500
-            });
+            this.snackBar.open(
+                "You've successfully created an account.",
+                null,
+                {
+                    duration: 1500
+                }
+            );
+
+            this.router.navigate(['administration']);
         });
     }
 

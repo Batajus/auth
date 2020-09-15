@@ -3,11 +3,12 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'login-component',
     templateUrl: 'login.component.html',
-    styleUrls: ['login.component.scss'],
+    styleUrls: ['login.component.scss']
 })
 export class LoginComponent implements OnInit {
     formGroup: FormGroup;
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private auth: AuthService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private router: Router
     ) {
         this.inLoginProcess = false;
         this.failedLogin = false;
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         this.formGroup = this.fb.group({
             username: ['', Validators.required],
-            password: ['', Validators.required],
+            password: ['', Validators.required]
         });
     }
 
@@ -47,10 +49,10 @@ export class LoginComponent implements OnInit {
 
                 if (successful) {
                     this.snackBar.open("You're successfully logged in.", null, {
-                        duration: 1500,
+                        duration: 1500
                     });
                     // TODO Implement hook for others
-                    return;
+                    return this.router.navigate(['administration']);
                 }
 
                 this.failedLogin = true;
