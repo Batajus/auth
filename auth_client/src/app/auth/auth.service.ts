@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -23,6 +23,7 @@ export class AuthService {
                         this.user = new User();
                         Object.assign(this.user, response);
 
+                        localStorage.setItem('UserID', this.user.id);
                         localStorage.setItem('JWT', this.user.jwt);
 
                         s.next(true);
@@ -49,15 +50,38 @@ export class AuthService {
                         user.id = response.id;
                         user.jwt = response.jwt;
 
+                        localStorage.setItem('UserID', this.user.id);
                         localStorage.setItem('JWT', this.user.jwt);
-
-                        s.next(true);
                     },
                     (err) => {
                         console.error(err);
                         s.next(false);
                     }
                 );
+        });
+    }
+
+    ensureUserLoaded(): Observable<User> {
+        return new Observable((s) => {
+            if (this.user) {
+                return s.next(this.user);
+            }
+
+            const jwt = localStorage.getItem('JWT');
+            const id = localStorage.getItem('UserID');
+
+            const headers = new HttpHeaders({
+                Authorization: `Bearer ${jwt}`
+            });
+
+            const params = new HttpParams({fromString: `id=${id}`});
+
+            return this.http
+                .get(`${this.url}/user`, { headers, params })
+                .subscribe((user: User) => {
+                    this.user = Object.assign(new User(), user);
+                    s.next(this.user);
+                });
         });
     }
 

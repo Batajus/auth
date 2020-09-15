@@ -82,6 +82,11 @@ function registration(req, res) {
  */
 function verifyAuthorization(req, res, next) {
     const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.sendStatus(401);
+    }
+
     const [, token] = authHeader && authHeader.split(' ');
 
     if (!token) {

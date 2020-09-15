@@ -18,15 +18,23 @@ app.use(cors());
 app.use(bodyParser.json());
 
 /**
- *
+ *  Handles authorization and registration
  */
 app.post('/login', auth.login);
 app.post('/registration', auth.registration);
 
+/**
+ *
+ */
+const User = require('./src/schemas/user');
 app.get('/user', auth.verifyAuthorization, (req, res) => {
-
-    res.sendStatus(200);
-})
+    User.findById(req.query.id).then((user) => {
+        res.send({ id: user._id, username: user.username, email: user.email });
+    }, err => {
+        console.error(err);
+        return res.sendStatus(500);
+    });
+});
 
 /**
  *
