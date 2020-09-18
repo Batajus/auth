@@ -1,4 +1,3 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 
 const MATERIAL_MODULES = [
     MatCardModule,
@@ -14,17 +16,16 @@ const MATERIAL_MODULES = [
     MatButtonModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatStepperModule
+    MatStepperModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatIconModule
 ];
 
 @NgModule({
     declarations: [],
-    imports: [
-        MATERIAL_MODULES
-    ],
-    exports: [
-        MATERIAL_MODULES
-    ],
+    imports: [MATERIAL_MODULES],
+    exports: [MATERIAL_MODULES],
     providers: []
 })
-export class MaterialModule { }
+export class MaterialModule {}

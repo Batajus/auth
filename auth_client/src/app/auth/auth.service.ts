@@ -41,6 +41,11 @@ export class AuthService {
         });
     }
 
+    logout() {
+        localStorage.removeItem('UserID');
+        localStorage.removeItem('JWT');
+    }
+
     register(user: User): Observable<boolean> {
         return new Observable((s) => {
             return this.http

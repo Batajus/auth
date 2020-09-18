@@ -1,1 +1,26 @@
-The user administration will be created here
+<div class="admin-main background">
+    <div class="admin-content">
+        <mat-toolbar>
+            <div class="admin-toolbar">
+                <div class="admin-toolbar-username">
+                    <span>{{ user?.username }}</span>
+                    <button
+                        mat-icon-button
+                        [matMenuTriggerFor]="menu"
+                        aria-label="Menu for extended user options"
+                    >
+                        <mat-icon>settings</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+        </mat-toolbar>
+    </div>
+</div>
+
+<mat-menu #menu>
+    <button mat-menu-item (click)="logout()">
+        <mat-icon>not_interested</mat-icon>
+        <span>Logout</span>
+    </button>
+</mat-menu>
