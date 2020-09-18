@@ -5,23 +5,28 @@ import {
     Router,
     RouterStateSnapshot
 } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 @Injectable({
-    'providedIn': 'root'
+    providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate {
-    constructor(private router: Router) {}
+    constructor(private router: Router, private auth: AuthService) {}
 
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
-    ): boolean {
-        const jwt: string = localStorage.getItem('JWT');
-        if (!jwt) {
-            this.router.navigate(['']);
-            return false;
-        }
+    ): Observable<boolean> {
+        return this.auth.isAuthorized().pipe(
+            map((res) => {
+                if (!res) {
+                    this.router.navigate(['']);
+                }
 
-        return true;
+                return res;
+            })
+        );
     }
 }

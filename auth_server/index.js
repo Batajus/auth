@@ -22,6 +22,7 @@ app.use(bodyParser.json());
  */
 app.post('/login', auth.login);
 app.post('/registration', auth.registration);
+app.get('/reauthorization', auth.verifyAuthorization, auth.reAuthoriatzion);
 
 /**
  *

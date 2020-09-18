@@ -15,7 +15,6 @@ function login(req, res) {
     }
 
     User.findOne({ username: req.body.username }).exec(function (err, user) {
-
         if (!user) {
             return res.sendStatus(403);
         }
@@ -28,7 +27,7 @@ function login(req, res) {
             'sha256'
         );
         if (Buffer.compare(hash, user.password) != 0) {
-            return res.sendStatus(403);
+            return res.sendStatus(401);
         }
 
         const jwt = generateJWT(req.body.username);
@@ -78,7 +77,24 @@ function registration(req, res) {
 }
 
 /**
- *
+ * Verfies if the authorization of a user is still valid
+ * If JWT is valid the expiration time is updated and will be returned
+ */
+function reAuthoriatzion(req, res) {
+    const authHeader = req.headers.authorization;
+    const [, token] = authHeader && authHeader.split(' ');
+
+    if (!req.query.id) {
+        return res.sendStatus(500);
+    }
+
+    User.findById(req.query.id).then((user) => {
+        res.send({ jwt: generateJWT(user.username) });
+    });
+}
+
+/**
+ * Checks if the http request contains a valid authorization header
  */
 function verifyAuthorization(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -94,7 +110,7 @@ function verifyAuthorization(req, res, next) {
     }
 
     if (!validateJWT(token)) {
-        return res.sendStatus(403);
+        return res.sendStatus(401);
     }
 
     next();
@@ -184,3 +200,4 @@ function validateJSON(json) {
 module.exports.login = login;
 module.exports.registration = registration;
 module.exports.verifyAuthorization = verifyAuthorization;
+module.exports.reAuthoriatzion = reAuthoriatzion;
