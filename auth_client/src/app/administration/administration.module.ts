@@ -4,10 +4,14 @@ import { AdministrationRoutingModule } from './administration-routing.module';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdministrationComponent } from './administration.component';
+import { UserFeaturesComponent } from './user-features/user-features.component';
+import { SecurityComponent } from './security/security.component';
 
 @NgModule({
     declarations: [
-        AdministrationComponent
+        AdministrationComponent,
+        UserFeaturesComponent,
+        SecurityComponent
     ],
     imports: [
         CommonModule,
@@ -17,4 +21,4 @@ import { AdministrationComponent } from './administration.component';
     ],
     providers: []
 })
-export class AdministrationModule { }
+export class AdministrationModule {}

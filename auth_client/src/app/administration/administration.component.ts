@@ -10,9 +10,14 @@ import { AuthService, User } from '../auth/auth.service';
 export class AdministrationComponent {
     user: User;
 
+    navObjs: NavigationObject[];
+    selectedNav: NavigationObject;
+
     constructor(private auth: AuthService, private router: Router) {}
 
     ngOnInit() {
+        this.initNavigation();
+
         this.auth.ensureUserLoaded().subscribe((user) => {
             this.user = user;
         });
@@ -22,4 +27,26 @@ export class AdministrationComponent {
         this.auth.logout();
         this.router.navigate(['']);
     }
+
+    selected(navObj: NavigationObject) {
+        this.selectedNav = navObj;
+    }
+
+    private initNavigation() {
+        this.selectedNav = new NavigationObject('Features', 'features', true);
+        this.navObjs = [
+            this.selectedNav,
+            new NavigationObject('Security', 'security'),
+        ];
+    }
+}
+
+class NavigationObject {
+    constructor(public label: string, public link: string, public selected = false) {}
+}
+
+enum NavigationEnum {
+    features,
+    security,
+    logout
 }

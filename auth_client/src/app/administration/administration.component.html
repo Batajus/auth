@@ -1,20 +1,43 @@
 <div class="admin-main background">
-    <div class="admin-content">
-        <mat-toolbar>
-            <div class="admin-toolbar">
-                <div class="admin-toolbar-username">
-                    <span>{{ user?.username }}</span>
-                    <button
-                        mat-icon-button
-                        [matMenuTriggerFor]="menu"
-                        aria-label="Menu for extended user options"
-                    >
-                        <mat-icon>settings</mat-icon>
-                    </button>
-
+    <div class="admin-main-container">
+        <div class="admin-main-container-content">
+            <div>
+                <mat-toolbar>
+                    <div class="admin-toolbar">
+                        <div class="admin-toolbar-username">
+                            <span>{{ user?.username }}</span>
+                            <!-- <button
+                                mat-icon-button
+                                [matMenuTriggerFor]="menu"
+                                aria-label="Menu for extended user options"
+                            >
+                                <mat-icon>settings</mat-icon>
+                            </button> -->
+                        </div>
+                    </div>
+                </mat-toolbar>
+            </div>
+            <div class="admin-content-container">
+                <div class="admin-content-container-nav">
+                    <mat-nav-list>
+                        <ng-container
+                            *ngFor="let item of navObjs; let isLast = last"
+                        >
+                            <a
+                                mat-list-item
+                                [routerLink]="item.link"
+                                [routerLinkActive]="['is-active']"
+                                >{{ item.label }}</a
+                            >
+                            <mat-divider *ngIf="!isLast"></mat-divider>
+                        </ng-container>
+                    </mat-nav-list>
+                </div>
+                <div class="admin-content-container-content">
+                    <router-outlet></router-outlet>
                 </div>
             </div>
-        </mat-toolbar>
+        </div>
     </div>
 </div>
 
