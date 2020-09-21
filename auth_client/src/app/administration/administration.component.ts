@@ -33,16 +33,17 @@ export class AdministrationComponent {
     }
 
     private initNavigation() {
-        this.selectedNav = new NavigationObject('Features', 'features', true);
+        this.selectedNav = new NavigationObject('Features', 'features');
         this.navObjs = [
             this.selectedNav,
             new NavigationObject('Security', 'security'),
+            // new NavigationObject('GDPR', 'gdpr')
         ];
     }
 }
 
 class NavigationObject {
-    constructor(public label: string, public link: string, public selected = false) {}
+    constructor(public label: string, public link: string) {}
 }
 
 enum NavigationEnum {

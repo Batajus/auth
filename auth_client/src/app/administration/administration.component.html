@@ -29,8 +29,13 @@
                                 [routerLinkActive]="['is-active']"
                                 >{{ item.label }}</a
                             >
-                            <mat-divider *ngIf="!isLast"></mat-divider>
+                            <mat-divider></mat-divider>
                         </ng-container>
+                    </mat-nav-list>
+
+                    <mat-nav-list>
+                        <mat-divider></mat-divider>
+                        <a mat-list-item>Logout</a>
                     </mat-nav-list>
                 </div>
                 <div class="admin-content-container-content">
