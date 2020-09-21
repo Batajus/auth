@@ -1,0 +1,13 @@
+.features {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+
+    padding: 16px 16px;
+
+    .feature {
+        mat-card {
+            margin: 8px;
+            background-color: #f5f5f5;
+        }
+    }
+}
