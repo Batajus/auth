@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../auth/auth.service';
+import { LogoutComponent } from '../logout/logout.component';
+import { NavigationObject } from './administration.api';
 
 @Component({
     selector: 'administration-component',
@@ -13,7 +16,7 @@ export class AdministrationComponent {
     navObjs: NavigationObject[];
     selectedNav: NavigationObject;
 
-    constructor(private auth: AuthService, private router: Router) {}
+    constructor(private auth: AuthService, private router: Router, private dialog: MatDialog) {}
 
     ngOnInit() {
         this.initNavigation();
@@ -24,8 +27,7 @@ export class AdministrationComponent {
     }
 
     logout() {
-        this.auth.logout();
-        this.router.navigate(['']);
+        this.dialog.open(LogoutComponent);
     }
 
     selected(navObj: NavigationObject) {
@@ -33,21 +35,13 @@ export class AdministrationComponent {
     }
 
     private initNavigation() {
-        this.selectedNav = new NavigationObject('Features', 'features');
+        this.selectedNav = new NavigationObject('Features', 'features', 'view_module');
         this.navObjs = [
             this.selectedNav,
-            new NavigationObject('Security', 'security'),
+            new NavigationObject('Security', 'security', 'security'),
             // new NavigationObject('GDPR', 'gdpr')
         ];
     }
 }
 
-class NavigationObject {
-    constructor(public label: string, public link: string) {}
-}
 
-enum NavigationEnum {
-    features,
-    security,
-    logout
-}

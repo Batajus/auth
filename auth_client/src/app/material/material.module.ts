@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const MATERIAL_MODULES = [
     MatCardModule,
@@ -23,7 +24,8 @@ const MATERIAL_MODULES = [
     MatMenuModule,
     MatIconModule,
     MatDividerModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
 ];
 
 @NgModule({

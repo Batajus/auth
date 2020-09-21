@@ -59,6 +59,19 @@
                     flex-direction: column;
                     justify-content: space-between;
 
+                    mat-icon {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    span {
+                        padding-left: 16px;
+                    }
+
+                    .logout {
+                        color: red;
+                    }
+
                     .mat-list-base {
                         padding: 0;
                     }
