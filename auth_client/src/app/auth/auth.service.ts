@@ -62,6 +62,8 @@ export class AuthService {
 
                         localStorage.setItem('UserID', this.user.id);
                         localStorage.setItem('JWT', this.user.jwt);
+
+                        s.next(true);
                     },
                     (err) => {
                         console.error(err);

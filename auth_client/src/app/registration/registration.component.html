@@ -1,10 +1,9 @@
 <div class="centered-container background">
     <form (ngSubmit)="submit()" [formGroup]="formGroup">
         <mat-card>
-
             <div class="registration-header">
                 <div class="title">Registration</div>
-                
+
                 <div class="subtitle">
                     <a [routerLink]="['']">Back to login</a>
                 </div>
@@ -13,39 +12,55 @@
             <mat-vertical-stepper [linear]="true" #stepper>
                 <mat-step [stepControl]="formGroup.controls.user">
                     <form [formGroup]="formGroup.controls.user">
-                        <ng-template matStepLabel>Fill out your username</ng-template
-                        >
+                        <ng-template matStepLabel>Fill out your username</ng-template>
                         <div>
                             <mat-form-field>
                                 <mat-label>Username *</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="Username"
-                                    formControlName="username"
-                                />
+                                <input matInput placeholder="Username" formControlName="username" />
+                                <mat-error *ngIf="formGroup.controls.user.get('username').hasError('required')"
+                                    >The username is required</mat-error
+                                >
                             </mat-form-field>
                         </div>
-                        <div>
-                            <mat-form-field>
-                                <mat-label>Password *</mat-label>
-                                <input
-                                    matInput
-                                    type="password"
-                                    placeholder="Password"
-                                    formControlName="password"
-                                />
-                            </mat-form-field>
-                        </div>
-                        <div>
-                            <mat-form-field>
-                                <mat-label>Repeat password *</mat-label>
-                                <input
-                                    matInput
-                                    type="password"
-                                    placeholder="Repeat Password"
-                                    formControlName="repeatedPassword"
-                                />
-                            </mat-form-field>
+                        <div formGroupName="passwords">
+                            <div class="example-container">
+                                <mat-form-field appearance="standard">
+                                    <mat-label>Password *</mat-label>
+                                    <input
+                                        matInput
+                                        [type]="hide ? 'password' : 'text'"
+                                        placeholder="Password"
+                                        formControlName="password"
+                                    />
+                                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
+                                        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                                    </button>
+                                    <mat-error *ngIf="pwFormGroup.get('password').hasError('required')"
+                                        >The password is required</mat-error
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field>
+                                    <mat-label>Repeat password *</mat-label>
+                                    <input
+                                        matInput
+                                        type="password"
+                                        placeholder="Repeat Password"
+                                        formControlName="repeatedPassword"
+                                    />
+                                    <mat-error *ngIf="pwFormGroup.get('repeatedPassword').hasError('required')"
+                                        >"Repeat password" is required</mat-error
+                                    >
+                                </mat-form-field>
+                                <mat-error class="external-mat-error"
+                                    *ngIf="
+                                        !pwFormGroup.get('repeatedPassword').hasError('required') &&
+                                        pwFormGroup.hasError('equality')
+                                    "
+                                    >The passwords must be equal</mat-error
+                                >
+                            </div>
                         </div>
                         <div>
                             <button mat-button matStepperNext>Next</button>
@@ -54,16 +69,10 @@
                 </mat-step>
                 <mat-step [stepControl]="formGroup.controls.mail">
                     <form [formGroup]="formGroup.controls.mail">
-                        <ng-template matStepLabel
-                            >Fill out your e-mail address</ng-template
-                        >
+                        <ng-template matStepLabel>Fill out your e-mail address</ng-template>
                         <mat-form-field>
                             <mat-label>E-Mail *</mat-label>
-                            <input
-                                matInput
-                                placeholder="E-Mail"
-                                formControlName="email"
-                            />
+                            <input matInput placeholder="E-Mail" formControlName="email" />
                         </mat-form-field>
                         <div>
                             <button mat-button matStepperPrevious>Back</button>
