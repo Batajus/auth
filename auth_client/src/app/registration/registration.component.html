@@ -20,6 +20,9 @@
                                 <mat-error *ngIf="formGroup.controls.user.get('username').hasError('required')"
                                     >The username is required</mat-error
                                 >
+                                <mat-error *ngIf="formGroup.controls.user.get('username').hasError('user')"
+                                    >The username is already used.</mat-error
+                                >
                             </mat-form-field>
                         </div>
                         <div formGroupName="passwords">
@@ -53,7 +56,8 @@
                                         >"Repeat password" is required</mat-error
                                     >
                                 </mat-form-field>
-                                <mat-error class="external-mat-error"
+                                <mat-error
+                                    class="external-mat-error"
                                     *ngIf="
                                         !pwFormGroup.get('repeatedPassword').hasError('required') &&
                                         pwFormGroup.hasError('equality')

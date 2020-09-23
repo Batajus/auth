@@ -1,11 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import {
-    FormGroup,
-    Validators,
-    FormBuilder,
-    ValidationErrors,
-    AbstractControl
-} from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, ValidationErrors, AbstractControl, FormControl } from '@angular/forms';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -16,7 +11,7 @@ import { CustomValidators } from '../helper/Validators';
     selector: 'registration-component',
     templateUrl: 'registration.component.html',
     styleUrls: ['../login/login.component.scss', 'registration.component.scss'],
-    providers: [{provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}]
+    providers: [{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }]
 })
 export class RegistrationComponent implements OnInit {
     formGroup: FormGroup;
@@ -32,7 +27,8 @@ export class RegistrationComponent implements OnInit {
         private fb: FormBuilder,
         private auth: AuthService,
         private snackBar: MatSnackBar,
-        private router: Router
+        private router: Router,
+        private http: HttpClient
     ) {}
 
     ngOnInit() {
@@ -45,18 +41,11 @@ export class RegistrationComponent implements OnInit {
         }
 
         const { user, mail } = this.formGroup.value;
-        const newUser = new User(
-            user.username,
-            mail.email,
-            user.passwords.password
-        );
+        const newUser = new User(user.username, mail.email, user.passwords.password);
 
         return this.auth.register(newUser).subscribe((successful: boolean) => {
             if (!successful) {
-                this.openSnackBar(
-                    'The registration could not be completed. Please try again later',
-                    3000
-                );
+                this.openSnackBar('The registration could not be completed. Please try again later', 3000);
                 this.formGroup.reset();
                 return;
             }
@@ -69,16 +58,14 @@ export class RegistrationComponent implements OnInit {
     private initFormGroups() {
         this.formGroup = this.fb.group({
             user: this.fb.group({
-                username: ['', Validators.required],
+                username: new FormControl(
+                    '',
+                    Validators.required,
+                    CustomValidators.checkForUniqueUsername(this.http, this.auth.user)
+                ),
                 passwords: this.fb.group(
                     {
-                        password: [
-                            '',
-                            Validators.compose([
-                                Validators.required,
-                                CustomValidators.passwordValidator
-                            ])
-                        ],
+                        password: ['', Validators.compose([Validators.required, CustomValidators.passwordValidator])],
                         repeatedPassword: ['', Validators.required]
                     },
                     {
@@ -91,9 +78,7 @@ export class RegistrationComponent implements OnInit {
             })
         });
 
-        this.pwFormGroup = this.formGroup
-            .get('user')
-            .get('passwords') as FormGroup;
+        this.pwFormGroup = this.formGroup.get('user').get('passwords') as FormGroup;
     }
 
     private openSnackBar(msg: string, duration = 1500) {
