@@ -31,7 +31,6 @@ app.get('/reauthorization', auth.verifyAuthorization, auth.reAuthoriatzion);
  * Handles all request for/about users
  */
 app.get('/user', auth.verifyAuthorization, user.getUser);
-app.post('/checkUsername', user.checkUsername);
 
 /**
  *  Start of the Express server

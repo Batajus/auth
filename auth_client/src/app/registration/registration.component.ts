@@ -58,11 +58,7 @@ export class RegistrationComponent implements OnInit {
     private initFormGroups() {
         this.formGroup = this.fb.group({
             user: this.fb.group({
-                username: new FormControl(
-                    '',
-                    Validators.required,
-                    CustomValidators.checkForUniqueUsername(this.http, this.auth.user)
-                ),
+                username: new FormControl('', Validators.required),
                 passwords: this.fb.group(
                     {
                         password: ['', Validators.compose([Validators.required, CustomValidators.passwordValidator])],
