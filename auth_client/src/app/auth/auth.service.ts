@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -12,28 +13,27 @@ export class AuthService {
     constructor(private http: HttpClient) {}
 
     login(username: string, password: string): Observable<boolean> {
-        return new Observable((s) => {
-            return this.http
-                .post(`${this.url}/login`, {
-                    username,
-                    password
-                })
-                .subscribe(
+        return this.http
+            .post(`${this.url}/auth/login`, {
+                username,
+                password
+            })
+            .pipe(
+                map(
                     (response: User) => {
                         this.user = new User();
                         Object.assign(this.user, response);
 
                         localStorage.setItem('UserID', this.user.id);
                         localStorage.setItem('JWT', this.user.jwt);
-
-                        s.next(true);
+                        return true;
                     },
                     (err) => {
                         console.error(err);
-                        s.next(false);
+                        return false;
                     }
-                );
-        });
+                )
+            );
     }
 
     logout() {
@@ -44,7 +44,7 @@ export class AuthService {
     register(user: User): Observable<boolean> {
         return new Observable((s) => {
             return this.http
-                .post(`${this.url}/registration`, {
+                .post(`${this.url}/auth/registration`, {
                     username: user.username,
                     email: user.email,
                     password: user.password
@@ -69,39 +69,41 @@ export class AuthService {
     }
 
     ensureUserLoaded(): Observable<User> {
-        return new Observable((s) => {
-            if (this.user) {
-                return s.next(this.user);
-            }
-
-            const jwt = localStorage.getItem('JWT');
-            const id = localStorage.getItem('UserID');
-
-            const headers = new HttpHeaders({
-                Authorization: `Bearer ${jwt}`
+        if (this.user) {
+            return new Observable((s) => {
+                s.next(this.user);
+                s.complete();
+                s.unsubscribe();
             });
+        }
 
-            const params = new HttpParams({ fromString: `id=${id}` });
+        const jwt = localStorage.getItem('JWT');
+        const id = localStorage.getItem('UserID');
 
-            return this.http.get(`${this.url}/user`, { headers, params }).subscribe(
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${jwt}`
+        });
+
+        return this.http.get(`${this.url}/users/${id}`, { headers }).pipe(
+            map(
                 (user: User) => {
                     this.user = Object.assign(new User(), user);
-                    s.next(this.user);
+                    return this.user;
                 },
                 (error) => {
                     if (error.status === 401) {
                         localStorage.removeItem('JWT');
                     }
 
-                    s.next(null);
+                    return null;
                 }
-            );
-        });
+            )
+        );
     }
 
     /**
      * This function is called by the auth-guard.service.ts
-     * It verifies if the current JWT is still valid
+     * It verifies the current JWT for its validity
      */
     isAuthorized(): Observable<boolean> {
         return new Observable((s) => {
@@ -114,7 +116,7 @@ export class AuthService {
 
             const params = new HttpParams({ fromString: `id=${id}` });
 
-            return this.http.get(`${this.url}/reauthorization`, { headers, params }).subscribe(
+            return this.http.get(`${this.url}/auth/reauthorization`, { headers, params }).subscribe(
                 (response: { jwt: string }) => {
                     localStorage.setItem('JWT', response.jwt);
                     s.next(true);

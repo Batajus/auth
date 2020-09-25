@@ -23,14 +23,14 @@ app.use(bodyParser.json());
 /**
  *  Handles authorization and registration
  */
-app.post('/login', auth.login);
-app.post('/registration', auth.registration);
-app.get('/reauthorization', auth.verifyAuthorization, auth.reAuthoriatzion);
+app.post('/auth/login', auth.login);
+app.post('/auth/registration', auth.registration);
+app.get('/auth/reauthorization', auth.verifyAuthorization, auth.reAuthoriatzion);
 
 /**
  * Handles all request for/about users
  */
-app.get('/user', auth.verifyAuthorization, user.getUser);
+app.get('/users/:id', auth.verifyAuthorization, user.getUsers);
 
 /**
  *  Start of the Express server
