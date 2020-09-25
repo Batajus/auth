@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, ValidationErrors, AbstractControl, FormControl } from '@angular/forms';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
@@ -43,16 +43,27 @@ export class RegistrationComponent implements OnInit {
         const { user, mail } = this.formGroup.value;
         const newUser = new User(user.username, mail.email, user.passwords.password);
 
-        return this.auth.register(newUser).subscribe((successful: boolean) => {
-            if (!successful) {
-                this.openSnackBar('The registration could not be completed. Please try again later', 3000);
-                this.formGroup.reset();
-                return;
-            }
+        return this.auth.register(newUser).subscribe(
+            () => {
+                this.openSnackBar("You've successfully created an account.");
+                this.router.navigate(['administration']);
+            },
+            (err: HttpErrorResponse) => {
+                if (err.status !== 403) {
+                    this.openSnackBar('The registration could not be completed. Please try again later', 3000);
+                    this.formGroup.reset();
+                    return;
+                }
 
-            this.openSnackBar("You've successfully created an account.");
-            this.router.navigate(['administration']);
-        });
+                if (err.error.username) {
+                    this.formGroup.get('user').get('username').setErrors({ notUnique: true });
+                }
+
+                if (err.error.email) {
+                    this.formGroup.get('mail').get('email').setErrors({ notUnique: true });
+                }
+            }
+        );
     }
 
     private initFormGroups() {

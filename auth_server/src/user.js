@@ -10,7 +10,7 @@ function getUsers(req, res) {
         },
         (err) => {
             console.error(err);
-            return res.sendStatus(500);
+            return res.sendStatus(401);
         }
     );
 }

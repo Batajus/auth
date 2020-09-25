@@ -20,7 +20,7 @@
                                 <mat-error *ngIf="formGroup.controls.user.get('username').hasError('required')"
                                     >The username is required</mat-error
                                 >
-                                <mat-error *ngIf="formGroup.controls.user.get('username').hasError('user')"
+                                <mat-error *ngIf="formGroup.controls.user.get('username').hasError('notUnique')"
                                     >The username is already used.</mat-error
                                 >
                             </mat-form-field>
@@ -77,6 +77,9 @@
                         <mat-form-field>
                             <mat-label>E-Mail *</mat-label>
                             <input matInput placeholder="E-Mail" formControlName="email" />
+                            <mat-error *ngIf="formGroup.controls.mail.get('email').hasError('notUnique')"
+                            >The username is already used.</mat-error
+                        >
                         </mat-form-field>
                         <div>
                             <button mat-button matStepperPrevious>Back</button>

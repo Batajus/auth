@@ -16,7 +16,7 @@ function login(req, res) {
 
     User.findOne({ username: req.body.username }).exec(function (err, user) {
         if (!user) {
-            return res.sendStatus(403);
+            return res.sendStatus(401);
         }
 
         const hash = crypto.pbkdf2Sync(req.body.password, user.salt, ITERATIONS, 256, 'sha256');
@@ -42,25 +42,39 @@ function registration(req, res) {
         return res.sendStatus(500);
     }
 
-    const salt = crypto.randomBytes(256).toString('base64');
-    const password = crypto.pbkdf2Sync(req.body.password, salt, ITERATIONS, 256, 'sha256');
+    const conflictPromises = Promise.all([
+        User.findOne({ username: req.body.username }).exec(),
+        User.findOne({ email: req.body.email }).exec()
+    ]);
 
-    const user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password,
-        salt
-    });
+    return conflictPromises.then(([conflictName, conflictMail]) => {
+        const errors = { username: !!conflictName, email: !!conflictMail };
 
-    user.save(function (err) {
-        if (err) {
-            console.error(err);
-            return res.sendStatus(500);
+        if (conflictName || conflictMail) {
+            res.status(403);
+            return res.send(errors);
         }
 
-        const jwt = generateJWT(user.username);
+        const salt = crypto.randomBytes(256).toString('base64');
+        const password = crypto.pbkdf2Sync(req.body.password, salt, ITERATIONS, 256, 'sha256');
 
-        res.send({ id: user._id, jwt });
+        const user = new User({
+            username: req.body.username,
+            email: req.body.email,
+            password,
+            salt
+        });
+
+        user.save(function (err) {
+            if (err) {
+                console.error(err);
+                return res.sendStatus(500);
+            }
+
+            const jwt = generateJWT(user.username);
+
+            res.send({ id: user._id, jwt });
+        });
     });
 }
 

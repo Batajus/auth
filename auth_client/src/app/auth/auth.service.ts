@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -41,31 +42,23 @@ export class AuthService {
         localStorage.removeItem('JWT');
     }
 
-    register(user: User): Observable<boolean> {
-        return new Observable((s) => {
-            return this.http
-                .post(`${this.url}/auth/registration`, {
-                    username: user.username,
-                    email: user.email,
-                    password: user.password
+    register(user: User): Observable<void> {
+        return this.http
+            .post(`${this.url}/auth/registration`, {
+                username: user.username,
+                email: user.email,
+                password: user.password
+            })
+            .pipe(
+                map((response: { id: string; jwt: string }) => {
+                    this.user = user;
+                    user.id = response.id;
+                    user.jwt = response.jwt;
+
+                    localStorage.setItem('UserID', this.user.id);
+                    localStorage.setItem('JWT', this.user.jwt);
                 })
-                .subscribe(
-                    (response: { id: string; jwt: string }) => {
-                        this.user = user;
-                        user.id = response.id;
-                        user.jwt = response.jwt;
-
-                        localStorage.setItem('UserID', this.user.id);
-                        localStorage.setItem('JWT', this.user.jwt);
-
-                        s.next(true);
-                    },
-                    (err) => {
-                        console.error(err);
-                        s.next(false);
-                    }
-                );
-        });
+            );
     }
 
     ensureUserLoaded(): Observable<User> {
@@ -85,19 +78,10 @@ export class AuthService {
         });
 
         return this.http.get(`${this.url}/users/${id}`, { headers }).pipe(
-            map(
-                (user: User) => {
-                    this.user = Object.assign(new User(), user);
-                    return this.user;
-                },
-                (error) => {
-                    if (error.status === 401) {
-                        localStorage.removeItem('JWT');
-                    }
-
-                    return null;
-                }
-            )
+            map((user: User) => {
+                this.user = Object.assign(new User(), user);
+                return this.user;
+            })
         );
     }
 
