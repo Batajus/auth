@@ -10,9 +10,13 @@
             </div>
 
             <mat-vertical-stepper [linear]="true" #stepper>
-                <mat-step [stepControl]="formGroup.controls.user">
+                <mat-step
+                    [stepControl]="formGroup.controls.user"
+                    errorMessage="The username ist already used."
+                    #stepUsername
+                >
                     <form [formGroup]="formGroup.controls.user">
-                        <ng-template matStepLabel>Fill out your username</ng-template>
+                        <ng-template matStepLabel>Fill out your credentials</ng-template>
                         <div>
                             <mat-form-field>
                                 <mat-label>Username *</mat-label>
@@ -71,15 +75,15 @@
                         </div>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]="formGroup.controls.mail">
+                <mat-step [stepControl]="formGroup.controls.mail" errorMessage="The E-Mail is already used." #stepEmail>
                     <form [formGroup]="formGroup.controls.mail">
                         <ng-template matStepLabel>Fill out your e-mail address</ng-template>
                         <mat-form-field>
                             <mat-label>E-Mail *</mat-label>
                             <input matInput placeholder="E-Mail" formControlName="email" />
                             <mat-error *ngIf="formGroup.controls.mail.get('email').hasError('notUnique')"
-                            >The username is already used.</mat-error
-                        >
+                                >The E-Mail is already used.</mat-error
+                            >
                         </mat-form-field>
                         <div>
                             <button mat-button matStepperPrevious>Back</button>
@@ -87,7 +91,7 @@
                         </div>
                     </form>
                 </mat-step>
-                <mat-step>
+                <mat-step #stepSubmit>
                     <ng-template matStepLabel>Done</ng-template>
                     <p>You are now done.</p>
                     <div>

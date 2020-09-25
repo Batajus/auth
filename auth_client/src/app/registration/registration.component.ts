@@ -1,8 +1,9 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, ValidationErrors, AbstractControl, FormControl } from '@angular/forms';
-import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatStep } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../auth/auth.service';
 import { CustomValidators } from '../helper/Validators';
@@ -11,7 +12,12 @@ import { CustomValidators } from '../helper/Validators';
     selector: 'registration-component',
     templateUrl: 'registration.component.html',
     styleUrls: ['../login/login.component.scss', 'registration.component.scss'],
-    providers: [{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }]
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { showError: true }
+        }
+    ]
 })
 export class RegistrationComponent implements OnInit {
     formGroup: FormGroup;
@@ -22,6 +28,15 @@ export class RegistrationComponent implements OnInit {
 
     // Boolean flag to show the password in the HTML
     hide = true;
+
+    @ViewChild('stepUsername')
+    stepUsername: MatStep;
+
+    @ViewChild('stepEmail')
+    stepEmail: MatStep;
+
+    @ViewChild('stepSubmit')
+    stepSubmit: MatStep;
 
     constructor(
         private fb: FormBuilder,
@@ -57,10 +72,18 @@ export class RegistrationComponent implements OnInit {
 
                 if (err.error.username) {
                     this.formGroup.get('user').get('username').setErrors({ notUnique: true });
+                    this.stepUsername.select();
                 }
 
                 if (err.error.email) {
                     this.formGroup.get('mail').get('email').setErrors({ notUnique: true });
+                    if (!err.error.username) {
+                        this.stepEmail.select();
+                    }
+                }
+
+                if (err.error.username || err.error.email) {
+                    this.stepSubmit.reset();
                 }
             }
         );
