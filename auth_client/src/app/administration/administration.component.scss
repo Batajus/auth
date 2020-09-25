@@ -6,35 +6,83 @@
     align-content: center;
     justify-content: center;
 
-    .admin-content {
-        position: relative;
+    .admin-main-container {
         background-color: #ffffff;
-
         margin: 24px 0;
         width: 80%;
 
-        .admin-toolbar {
+        .admin-main-container-content {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            height: 100%;
 
-            width: 100%;
-            
-            .admin-toolbar-username {
+            .admin-toolbar {
                 display: flex;
-                flex: 1;
                 align-items: center;
-                justify-content: flex-end;
 
-                span, mat-icon {
-                    font-weight: 400;
+                width: 100%;
+
+                .admin-toolbar-username {
+                    display: flex;
+                    flex: 1;
+                    align-items: center;
+                    justify-content: flex-end;
+
+                    span,
+                    mat-icon {
+                        font-weight: 400;
+                    }
+
+                    span {
+                        font-size: 18px;
+                    }
+
+                    mat-icon {
+                        font-size: 20px;
+                    }
+                }
+            }
+
+            .admin-content-container {
+                display: flex;
+                height: 100%;
+                width: 100%;
+                position: relative;
+
+                border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+                &-nav {
+                    width: 15%;
+                    border-right: 1px solid rgba(0, 0, 0, 0.12);
+
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+
+                    mat-icon {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    span {
+                        padding-left: 16px;
+                    }
+
+                    .logout {
+                        color: red;
+                    }
+
+                    .mat-list-base {
+                        padding: 0;
+                    }
+
+                    .is-active {
+                        background-color: rgba(0, 0, 0, 0.12);
+                    }
                 }
 
-                span {
-                    font-size: 18px;
-                }
-
-                mat-icon {
-                    font-size: 20px;
+                &-content {
+                    flex: 1;
                 }
             }
         }

@@ -1,28 +1,34 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import {
-    FormGroup,
-    Validators,
-    FormBuilder,
-    ValidationErrors,
-    AbstractControl
-} from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, ValidationErrors, AbstractControl, FormControl } from '@angular/forms';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../auth/auth.service';
+import { CustomValidators } from '../helper/Validators';
 
 @Component({
     selector: 'registration-component',
     templateUrl: 'registration.component.html',
-    styleUrls: ['../login/login.component.scss', 'registration.component.scss']
+    styleUrls: ['../login/login.component.scss', 'registration.component.scss'],
+    providers: [{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }]
 })
 export class RegistrationComponent implements OnInit {
     formGroup: FormGroup;
+
+    // Reference to the password form group, so it is easier to
+    // access it from within the HTML
+    pwFormGroup: FormGroup;
+
+    // Boolean flag to show the password in the HTML
+    hide = true;
 
     constructor(
         private fb: FormBuilder,
         private auth: AuthService,
         private snackBar: MatSnackBar,
-        private router: Router
+        private router: Router,
+        private http: HttpClient
     ) {}
 
     ngOnInit() {
@@ -35,22 +41,16 @@ export class RegistrationComponent implements OnInit {
         }
 
         const { user, mail } = this.formGroup.value;
-        const newUser = new User(user.username, mail.email, user.password);
+        const newUser = new User(user.username, mail.email, user.passwords.password);
 
         return this.auth.register(newUser).subscribe((successful: boolean) => {
             if (!successful) {
-                // TODO Do something useful
+                this.openSnackBar('The registration could not be completed. Please try again later', 3000);
+                this.formGroup.reset();
                 return;
             }
 
-            this.snackBar.open(
-                "You've successfully created an account.",
-                null,
-                {
-                    duration: 1500
-                }
-            );
-
+            this.openSnackBar("You've successfully created an account.");
             this.router.navigate(['administration']);
         });
     }
@@ -58,36 +58,32 @@ export class RegistrationComponent implements OnInit {
     private initFormGroups() {
         this.formGroup = this.fb.group({
             user: this.fb.group({
-                username: ['', Validators.required],
-                password: [
+                username: new FormControl(
                     '',
-                    Validators.compose([
-                        Validators.required,
-                        this.passwordValidator
-                    ])
-                ],
-                repeatedPassword: [
-                    '',
-                    Validators.compose([Validators.required])
-                ]
+                    Validators.required,
+                    CustomValidators.checkForUniqueUsername(this.http, this.auth.user)
+                ),
+                passwords: this.fb.group(
+                    {
+                        password: ['', Validators.compose([Validators.required, CustomValidators.passwordValidator])],
+                        repeatedPassword: ['', Validators.required]
+                    },
+                    {
+                        validators: CustomValidators.passwordEquality
+                    }
+                )
             }),
             mail: this.fb.group({
                 email: ['', Validators.email]
             })
         });
+
+        this.pwFormGroup = this.formGroup.get('user').get('passwords') as FormGroup;
     }
 
-    private passwordValidator(
-        control: AbstractControl
-    ): ValidationErrors | null {
-        // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]).{8,32}$
-
-        return null;
-    }
-
-    private passwordEqualityValidator(
-        controls: AbstractControl
-    ): ValidationErrors | null {
-        return null;
+    private openSnackBar(msg: string, duration = 1500) {
+        this.snackBar.open(msg, null, {
+            duration
+        });
     }
 }

@@ -19,13 +19,7 @@ function login(req, res) {
             return res.sendStatus(403);
         }
 
-        const hash = crypto.pbkdf2Sync(
-            req.body.password,
-            user.salt,
-            ITERATIONS,
-            256,
-            'sha256'
-        );
+        const hash = crypto.pbkdf2Sync(req.body.password, user.salt, ITERATIONS, 256, 'sha256');
         if (Buffer.compare(hash, user.password) != 0) {
             return res.sendStatus(401);
         }
@@ -49,13 +43,7 @@ function registration(req, res) {
     }
 
     const salt = crypto.randomBytes(256).toString('base64');
-    const password = crypto.pbkdf2Sync(
-        req.body.password,
-        salt,
-        ITERATIONS,
-        256,
-        'sha256'
-    );
+    const password = crypto.pbkdf2Sync(req.body.password, salt, ITERATIONS, 256, 'sha256');
 
     const user = new User({
         username: req.body.username,
@@ -81,9 +69,6 @@ function registration(req, res) {
  * If JWT is valid the expiration time is updated and will be returned
  */
 function reAuthoriatzion(req, res) {
-    const authHeader = req.headers.authorization;
-    const [, token] = authHeader && authHeader.split(' ');
-
     if (!req.query.id) {
         return res.sendStatus(500);
     }
@@ -131,14 +116,9 @@ function generateJWT(username) {
         nickname: username
     };
 
-    const preSignature = `${base64url(JSON.stringify(header))}.${base64url(
-        JSON.stringify(payload)
-    )}`;
+    const preSignature = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(payload))}`;
 
-    const signature = crypto
-        .createHmac('sha256', process.env.JWT_SECRET)
-        .update(preSignature)
-        .digest('hex');
+    const signature = crypto.createHmac('sha256', process.env.JWT_SECRET).update(preSignature).digest('hex');
 
     return `${preSignature}.${signature}`;
 }
@@ -156,10 +136,7 @@ function validateJWT(jwt) {
     let [header, payload, signature] = splittedJWT;
 
     // Invalidate the JWT if the header and payload are not valid JSON's
-    if (
-        !validateJSON(base64url.decode(header)) ||
-        !validateJSON(base64url.decode(payload))
-    ) {
+    if (!validateJSON(base64url.decode(header)) || !validateJSON(base64url.decode(payload))) {
         return false;
     }
 

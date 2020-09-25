@@ -1,26 +1,45 @@
 <div class="admin-main background">
-    <div class="admin-content">
-        <mat-toolbar>
-            <div class="admin-toolbar">
-                <div class="admin-toolbar-username">
-                    <span>{{ user?.username }}</span>
-                    <button
-                        mat-icon-button
-                        [matMenuTriggerFor]="menu"
-                        aria-label="Menu for extended user options"
-                    >
-                        <mat-icon>settings</mat-icon>
-                    </button>
+    <div class="admin-main-container">
+        <div class="admin-main-container-content">
+            <div>
+                <mat-toolbar>
+                    <div class="admin-toolbar">
+                        <div class="admin-toolbar-username">
+                            <span>{{ user?.username }}</span>
+                        </div>
+                    </div>
+                </mat-toolbar>
+            </div>
+            <div class="admin-content-container">
+                <div class="admin-content-container-nav">
+                    <mat-nav-list>
+                        <ng-container
+                            *ngFor="let item of navObjs; let isLast = last"
+                        >
+                            <a
+                                mat-list-item
+                                [routerLink]="item.link"
+                                [routerLinkActive]="['is-active']"
+                            >
+                                <mat-icon>{{ item.icon }}</mat-icon>
+                                <span>{{ item.label }}</span></a
+                            >
+                            <mat-divider></mat-divider>
+                        </ng-container>
+                    </mat-nav-list>
 
+                    <mat-nav-list>
+                        <mat-divider></mat-divider>
+                        <a mat-list-item class="logout" (click)="logout()">
+                            <mat-icon>meeting_room</mat-icon>
+                            <span>Logout</span></a
+                        >
+                    </mat-nav-list>
+                </div>
+                <div class="admin-content-container-content">
+                    <router-outlet></router-outlet>
                 </div>
             </div>
-        </mat-toolbar>
+        </div>
     </div>
 </div>
-
-<mat-menu #menu>
-    <button mat-menu-item (click)="logout()">
-        <mat-icon>not_interested</mat-icon>
-        <span>Logout</span>
-    </button>
-</mat-menu>

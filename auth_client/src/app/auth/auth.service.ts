@@ -1,9 +1,4 @@
-import {
-    HttpClient,
-    HttpErrorResponse,
-    HttpHeaders,
-    HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,7 +7,7 @@ import { environment } from 'src/environments/environment';
     providedIn: 'root'
 })
 export class AuthService {
-    private user: User;
+    public user: User;
 
     constructor(private http: HttpClient) {}
 
@@ -62,6 +57,8 @@ export class AuthService {
 
                         localStorage.setItem('UserID', this.user.id);
                         localStorage.setItem('JWT', this.user.jwt);
+
+                        s.next(true);
                     },
                     (err) => {
                         console.error(err);
@@ -86,21 +83,19 @@ export class AuthService {
 
             const params = new HttpParams({ fromString: `id=${id}` });
 
-            return this.http
-                .get(`${this.url}/user`, { headers, params })
-                .subscribe(
-                    (user: User) => {
-                        this.user = Object.assign(new User(), user);
-                        s.next(this.user);
-                    },
-                    (error) => {
-                        if (error.status === 401) {
-                            localStorage.removeItem('JWT');
-                        }
-
-                        s.next(null);
+            return this.http.get(`${this.url}/user`, { headers, params }).subscribe(
+                (user: User) => {
+                    this.user = Object.assign(new User(), user);
+                    s.next(this.user);
+                },
+                (error) => {
+                    if (error.status === 401) {
+                        localStorage.removeItem('JWT');
                     }
-                );
+
+                    s.next(null);
+                }
+            );
         });
     }
 
@@ -119,21 +114,19 @@ export class AuthService {
 
             const params = new HttpParams({ fromString: `id=${id}` });
 
-            return this.http
-                .get(`${this.url}/reauthorization`, { headers, params })
-                .subscribe(
-                    (response: { jwt: string }) => {
-                        localStorage.setItem('JWT', response.jwt);
-                        s.next(true);
-                    },
-                    (error: HttpErrorResponse) => {
-                        if (error.status === 401) {
-                            localStorage.removeItem('JWT');
-                        }
-
-                        s.next(false);
+            return this.http.get(`${this.url}/reauthorization`, { headers, params }).subscribe(
+                (response: { jwt: string }) => {
+                    localStorage.setItem('JWT', response.jwt);
+                    s.next(true);
+                },
+                (error: HttpErrorResponse) => {
+                    if (error.status === 401) {
+                        localStorage.removeItem('JWT');
                     }
-                );
+
+                    s.next(false);
+                }
+            );
         });
     }
 
@@ -145,9 +138,5 @@ export class AuthService {
 export class User {
     id: string;
     jwt: string;
-    constructor(
-        public username: string = null,
-        public email: string = null,
-        public password: string = null
-    ) {}
+    constructor(public username: string = null, public email: string = null, public password: string = null) {}
 }

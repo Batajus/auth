@@ -2,7 +2,10 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
+// "Controllers"
 const auth = require('./src/auth');
+const user = require('./src/user');
 
 require('./src/db');
 
@@ -25,20 +28,13 @@ app.post('/registration', auth.registration);
 app.get('/reauthorization', auth.verifyAuthorization, auth.reAuthoriatzion);
 
 /**
- *
+ * Handles all request for/about users
  */
-const User = require('./src/schemas/user');
-app.get('/user', auth.verifyAuthorization, (req, res) => {
-    User.findById(req.query.id).then((user) => {
-        res.send({ id: user._id, username: user.username, email: user.email });
-    }, err => {
-        console.error(err);
-        return res.sendStatus(500);
-    });
-});
+app.get('/user', auth.verifyAuthorization, user.getUser);
+app.post('/checkUsername', user.checkUsername);
 
 /**
- *
+ *  Start of the Express server
  */
 app.listen(PORT, () => {
     console.log(`Server started at http://localhost:${PORT}`);

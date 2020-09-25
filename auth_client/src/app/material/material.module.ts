@@ -9,6 +9,11 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatBadgeModule } from '@angular/material/badge';
 
 const MATERIAL_MODULES = [
     MatCardModule,
@@ -19,7 +24,13 @@ const MATERIAL_MODULES = [
     MatStepperModule,
     MatToolbarModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+    MatCardModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatBadgeModule
 ];
 
 @NgModule({
