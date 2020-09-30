@@ -30,7 +30,7 @@
                             </mat-form-field>
                         </div>
                         <div formGroupName="passwords">
-                            <div class="example-container">
+                            <div>
                                 <mat-form-field appearance="standard">
                                     <mat-label>Password *</mat-label>
                                     <input
@@ -38,6 +38,7 @@
                                         [type]="hide ? 'password' : 'text'"
                                         placeholder="Password"
                                         formControlName="password"
+                                        autocomplete="on"
                                     />
                                     <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
                                         <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -55,6 +56,7 @@
                                         type="password"
                                         placeholder="Repeat Password"
                                         formControlName="repeatedPassword"
+                                        autocomplete="on"
                                     />
                                     <mat-error *ngIf="pwFormGroup.get('repeatedPassword').hasError('required')"
                                         >"Repeat password" is required</mat-error
