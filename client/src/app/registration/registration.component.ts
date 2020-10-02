@@ -58,7 +58,12 @@ export class RegistrationComponent implements OnInit {
             (err: HttpErrorResponse) => {
                 if (err.status !== 403) {
                     this.openSnackBar('The registration could not be completed. Please try again later', 3000);
-                    this.formGroup.reset();
+                    
+                    this.stepUsername.select();
+                    this.stepUsername.reset();
+                    this.stepEmail.reset();
+                    this.stepSubmit.reset();
+
                     return;
                 }
 

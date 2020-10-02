@@ -21,19 +21,19 @@ export class CustomValidators {
             errors.length = true;
         }
 
-        if (!/(?=.*[A-Z])/g.test(value)) {
+        if (!value || !/(?=.*[A-Z])/g.test(value)) {
             errors.upperCase = true;
         }
 
-        if (!/(?=.*[a-z])/g.test(value)) {
+        if (!value || !/(?=.*[a-z])/g.test(value)) {
             errors.lowerCase = true;
         }
 
-        if (!/(?=.*[0-9])/g.test(value)) {
+        if (!value || !/(?=.*[0-9])/g.test(value)) {
             errors.number = true;
         }
-        
-        if (!/(?=.*[*.!@$%^&:;,.?~\+\-=])/g.test(value)) {
+
+        if (!value || !/(?=.*[*.!@$%^&:;,.?~\+\-=])/g.test(value)) {
             errors.special = true;
         }
 
