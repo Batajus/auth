@@ -29,49 +29,13 @@
                                 >
                             </mat-form-field>
                         </div>
-                        <div formGroupName="passwords">
-                            <div>
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Password *</mat-label>
-                                    <input
-                                        matInput
-                                        [type]="hide ? 'password' : 'text'"
-                                        placeholder="Password"
-                                        formControlName="password"
-                                        autocomplete="on"
-                                    />
-                                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
-                                        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-                                    </button>
-                                    <mat-error *ngIf="pwFormGroup.get('password').hasError('required')"
-                                        >The password is required</mat-error
-                                    >
-                                </mat-form-field>
-                            </div>
-                            <div>
-                                <mat-form-field>
-                                    <mat-label>Repeat password *</mat-label>
-                                    <input
-                                        matInput
-                                        type="password"
-                                        placeholder="Repeat Password"
-                                        formControlName="repeatedPassword"
-                                        autocomplete="on"
-                                    />
-                                    <mat-error *ngIf="pwFormGroup.get('repeatedPassword').hasError('required')"
-                                        >"Repeat password" is required</mat-error
-                                    >
-                                </mat-form-field>
-                                <mat-error
-                                    class="external-mat-error"
-                                    *ngIf="
-                                        !pwFormGroup.get('repeatedPassword').hasError('required') &&
-                                        pwFormGroup.hasError('equality')
-                                    "
-                                    >The passwords must be equal</mat-error
-                                >
-                            </div>
+
+                        <div class="passwords-container">
+                            <passwords-component
+                                [formGroup]="formGroup.get('user').get('passwords')"
+                            ></passwords-component>
                         </div>
+
                         <div>
                             <button mat-button matStepperNext>Next</button>
                         </div>

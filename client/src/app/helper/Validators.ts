@@ -13,8 +13,34 @@ export class CustomValidators {
     }
 
     static passwordValidator(control: AbstractControl): ValidationErrors {
-        // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]).{8,32}$
-        return null;
-    }
+        const value: string = control.value;
 
+        const errors: ValidationErrors = {};
+
+        if (!value || value.length < 8) {
+            errors.length = true;
+        }
+
+        if (!/(?=.*[A-Z])/g.test(value)) {
+            errors.upperCase = true;
+        }
+
+        if (!/(?=.*[a-z])/g.test(value)) {
+            errors.lowerCase = true;
+        }
+
+        if (!/(?=.*[0-9])/g.test(value)) {
+            errors.number = true;
+        }
+        
+        if (!/(?=.*[*.!@$%^&:;,.?~\+\-=])/g.test(value)) {
+            errors.special = true;
+        }
+
+        if (!Object.keys(errors).length) {
+            return null;
+        }
+
+        return errors;
+    }
 }

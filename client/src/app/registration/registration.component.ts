@@ -1,7 +1,7 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, Validators, FormBuilder, ValidationErrors, AbstractControl, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStep } from '@angular/material/stepper';
 import { Router } from '@angular/router';
@@ -22,13 +22,6 @@ import { CustomValidators } from '../helper/Validators';
 export class RegistrationComponent implements OnInit {
     formGroup: FormGroup;
 
-    // Reference to the password form group, so it is easier to
-    // access it from within the HTML
-    pwFormGroup: FormGroup;
-
-    // Boolean flag to show the password in the HTML
-    hide = true;
-
     @ViewChild('stepUsername')
     stepUsername: MatStep;
 
@@ -42,8 +35,7 @@ export class RegistrationComponent implements OnInit {
         private fb: FormBuilder,
         private auth: AuthService,
         private snackBar: MatSnackBar,
-        private router: Router,
-        private http: HttpClient
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -107,8 +99,6 @@ export class RegistrationComponent implements OnInit {
                 email: ['', Validators.email]
             })
         });
-
-        this.pwFormGroup = this.formGroup.get('user').get('passwords') as FormGroup;
     }
 
     private openSnackBar(msg: string, duration = 1500) {
