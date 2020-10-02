@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -20,20 +20,18 @@ export class AuthService {
                 password
             })
             .pipe(
-                map(
-                    (response: User) => {
-                        this.user = new User();
-                        Object.assign(this.user, response);
+                map((response: User) => {
+                    this.user = new User();
+                    Object.assign(this.user, response);
 
-                        localStorage.setItem('UserID', this.user.id);
-                        localStorage.setItem('JWT', this.user.jwt);
-                        return true;
-                    },
-                    (err) => {
-                        console.error(err);
-                        return false;
-                    }
-                )
+                    localStorage.setItem('UserID', this.user.id);
+                    localStorage.setItem('JWT', this.user.jwt);
+                    return true;
+                }),
+                catchError((err) => {
+                    console.error(err);
+                    return of(false);
+                })
             );
     }
 
