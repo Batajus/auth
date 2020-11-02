@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { RegistrationRoutingModule } from './registration-routing.module';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { PasswordComponent } from '../control/passwords.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-    declarations: [RegistrationComponent, PasswordComponent],
-    imports: [CommonModule, ReactiveFormsModule, MaterialModule, RegistrationRoutingModule],
+    declarations: [RegistrationComponent],
+    imports: [CommonModule, ReactiveFormsModule, MaterialModule, RegistrationRoutingModule, SharedModule],
     providers: []
 })
 export class RegistrationModule {}

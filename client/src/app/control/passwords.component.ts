@@ -4,12 +4,9 @@ import { FormGroup } from '@angular/forms';
 @Component({
     selector: 'passwords-component',
     templateUrl: 'passwords.component.html',
-    styleUrls: [
-
-        'passwords.component.scss'
-    ]
+    styleUrls: ['passwords.component.scss']
 })
-export class PasswordComponent {
+export class PasswordsComponent {
     // Boolean flag to show the password in the HTML
     hide: boolean = true;
 
@@ -21,9 +18,4 @@ export class PasswordComponent {
     formGroup: FormGroup;
 
     constructor() {}
-
-    ngOnInit() {
-       
-    }
-    
 }

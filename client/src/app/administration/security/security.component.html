@@ -1,1 +1,14 @@
-<h1>Hello World</h1>
+<div class="security-container">
+    <div *ngIf="formGroup">
+        <form (ngSubmit)="submit($event)" [formGroup]="formGroup">
+            <mat-card>
+                <passwords-component [formGroup]="formGroup?.get('passwords')"></passwords-component>
+                <button mat-button>Submit</button>
+            </mat-card>
+        </form>
+    </div>
+
+    <div>
+        <mat-card>Two Factor Authorization - Coming soon</mat-card>
+    </div>
+</div>

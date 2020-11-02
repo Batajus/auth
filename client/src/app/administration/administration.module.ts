@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AdministrationComponent } from './administration.component';
 import { UserFeaturesComponent } from './user-features/user-features.component';
 import { SecurityComponent } from './security/security.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { SecurityComponent } from './security/security.component';
         CommonModule,
         ReactiveFormsModule,
         MaterialModule,
-        AdministrationRoutingModule
+        AdministrationRoutingModule,
+        SharedModule
     ],
     providers: []
 })
