@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'passwords-component',
     templateUrl: 'passwords.component.html',
     styleUrls: ['passwords.component.scss']
 })
-export class PasswordsComponent {
+export class PasswordsComponent implements OnInit {
     // Boolean flag to show the password in the HTML
     hide: boolean = true;
 
@@ -17,5 +17,15 @@ export class PasswordsComponent {
     @Input()
     formGroup: FormGroup;
 
+    pwCtrl: FormControl;
+
     constructor() {}
+
+    ngOnInit() {
+        this.pwCtrl = this.formGroup.get('password') as FormControl;
+
+        if (!this.pwCtrl) {
+            throw new Error('FormGroup is missing a "password" control');
+        }
+    }
 }
