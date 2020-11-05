@@ -21,16 +21,17 @@ app.use(cors());
 app.use(bodyParser.json());
 
 /**
- *  Handles authorization and registration
+ *  Handles authentication and registration
  */
 app.post('/auth/login', auth.login);
 app.post('/auth/registration', auth.registration);
-app.get('/auth/reauthorization', auth.verifyAuthorization, auth.reAuthoriatzion);
+app.get('/auth/re-authorization', auth.verifyAuthorization, auth.reAuthoriatzion);
 
 /**
  * Handles all request for/about users
  */
 app.get('/users/:id', auth.verifyAuthorization, user.getUsers);
+app.post('/users/:id/change-password', auth.verifyAuthorization, auth.changePassword);
 
 /**
  *  Start of the Express server

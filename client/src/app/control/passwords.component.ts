@@ -28,4 +28,10 @@ export class PasswordsComponent implements OnInit {
             throw new Error('FormGroup is missing a "password" control');
         }
     }
+
+    onBlur() {
+        setTimeout(() => {
+            this.passwordFocus = false;
+        }, 125);
+    }
 }

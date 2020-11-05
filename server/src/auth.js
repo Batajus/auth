@@ -78,6 +78,32 @@ function registration(req, res) {
     });
 }
 
+function changePassword(req, res) {
+    if (!req.body || !Object.keys(req.body).length) {
+        return res.sendStatus(500);
+    }
+
+    return User.findById(req.params.id).then(
+        (user) => {
+            user.password = crypto.pbkdf2Sync(req.body.password, user.salt, ITERATIONS, 256, 'sha256');
+            user.save(function (err) {
+                if (err) {
+                    console.error(err);
+                    return res.sendStatus(500);
+                }
+
+                // If the password change was successful return a new token
+                const jwt = generateJWT(user.username);
+                res.send({ jwt });
+            });
+        },
+        (err) => {
+            console.error(err);
+            return res.sendStatus(401);
+        }
+    );
+}
+
 /**
  * Verfies if the authorization of a user is still valid
  * If JWT is valid the expiration time is updated and will be returned
@@ -87,7 +113,7 @@ function reAuthoriatzion(req, res) {
         return res.sendStatus(500);
     }
 
-    User.findById(req.query.id).then((user) => {
+    return User.findById(req.query.id).then((user) => {
         res.send({ jwt: generateJWT(user.username) });
     });
 }
@@ -192,3 +218,4 @@ module.exports.login = login;
 module.exports.registration = registration;
 module.exports.verifyAuthorization = verifyAuthorization;
 module.exports.reAuthoriatzion = reAuthoriatzion;
+module.exports.changePassword = changePassword;

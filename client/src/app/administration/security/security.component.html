@@ -1,14 +1,37 @@
 <div class="security-container">
-    <div *ngIf="formGroup">
-        <form (ngSubmit)="submit($event)" [formGroup]="formGroup">
+    <div>
+        <form #test (submit)="submit()" [formGroup]="formGroup">
             <mat-card>
-                <passwords-component [formGroup]="formGroup?.get('passwords')"></passwords-component>
-                <button mat-button>Submit</button>
+                <mat-card-header>
+                    <mat-card-title>Change Password </mat-card-title>
+                    <mat-card-subtitle>A strong password is the key to secure your account.</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <passwords-component [formGroup]="formGroup"></passwords-component>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button type="button" (click)="clear()">Clear</button>
+                    <button mat-raised-button color="primary" *ngIf="!passwordChangeInProgress; else loading">
+                        Submit
+                    </button>
+                </mat-card-actions>
             </mat-card>
         </form>
     </div>
 
     <div>
-        <mat-card>Two Factor Authorization - Coming soon</mat-card>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Two Factor Authentication</mat-card-title>
+                <mat-card-subtitle
+                    >Adding two factor authentication provides additional security to your account.
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content> Coming soon ... </mat-card-content>
+        </mat-card>
     </div>
 </div>
+
+<ng-template #loading>
+    <mat-progress-spinner color="primary" diameter="36" mode="indeterminate"> </mat-progress-spinner>
+</ng-template>

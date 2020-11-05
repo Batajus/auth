@@ -83,6 +83,21 @@ export class AuthService {
         );
     }
 
+    changePassword(password: string): Observable<boolean> {
+        const jwt = localStorage.getItem('JWT');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${jwt}`
+        });
+
+        return this.http.post(`${this.url}/users/${this.user.id}/change-password`, { password }, { headers }).pipe(
+            map(({ jwt }: { jwt: string }) => {
+                this.user.jwt = jwt;
+                localStorage.setItem('JWT', jwt);
+                return true;
+            })
+        );
+    }
+
     /**
      * This function is called by the auth-guard.service.ts
      * It verifies the current JWT for its validity
@@ -98,7 +113,7 @@ export class AuthService {
 
             const params = new HttpParams({ fromString: `id=${id}` });
 
-            return this.http.get(`${this.url}/auth/reauthorization`, { headers, params }).subscribe(
+            return this.http.get(`${this.url}/auth/re-authorization`, { headers, params }).subscribe(
                 (response: { jwt: string }) => {
                     localStorage.setItem('JWT', response.jwt);
                     s.next(true);
