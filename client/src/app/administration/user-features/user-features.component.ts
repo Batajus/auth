@@ -16,14 +16,8 @@ export class UserFeaturesComponent {
     constructor(private auth: AuthService) {}
 
     ngOnInit() {
-        this.usedFeatures = new UIFeatureContext(
-            [],
-            "You're not using any features."
-        );
-        this.notUsedFeatures = new UIFeatureContext(
-            [],
-            "There are no features, which you're not using."
-        );
+        this.usedFeatures = new UIFeatureContext([], 'You are not using any features.');
+        this.notUsedFeatures = new UIFeatureContext([], 'There are no features, which you are not using.');
     }
 }
 

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const models = require('./schemas/user');
+const models = require('./schemas/users');
 
 const mongoDB = 'mongodb://127.0.0.1/users';
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
