@@ -1,7 +1,7 @@
 const base64url = require('base64url');
 const crypto = require('crypto');
 
-const User = require('./schemas/users');
+const User = require('./schemas/user');
 
 const ALGORITHM = 'HS256';
 const ITERATIONS = 10000;

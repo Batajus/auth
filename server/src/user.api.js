@@ -1,4 +1,4 @@
-const User = require('./schemas/users');
+const User = require('./schemas/user');
 
 /**
  * Loads the respective user by  its id

@@ -1,4 +1,4 @@
-const Feature = require('./schemas/features');
+const Feature = require('./schemas/feature');
 
 function loadFeatures(req, res) {
     // TODO Implement Paging

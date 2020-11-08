@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
-const models = require('./schemas/users');
 
-const mongoDB = 'mongodb://127.0.0.1/users';
+// Required? 
+const user = require('./schemas/user');
+const feature = require('./schemas/feature')
+
+const mongoDB = 'mongodb://127.0.0.1/auth';
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Get the default connection

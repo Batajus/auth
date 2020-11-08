@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 
 // "Controllers"
 const auth = require('./src/auth');
-const user = require('./src/user');
-const features = require('./src/feature');
+const user = require('./src/user.api');
+const feature = require('./src/feature.api');
 
 require('./src/db');
 
@@ -37,7 +37,8 @@ app.post('/users/:id/change-password', auth.verifyAuthorization, auth.changePass
 /**
  * Handles all request for/about features
  */
-app.get('/features', auth.verifyAuthorization, features.loadFeatures);
+app.get('/features', auth.verifyAuthorization, feature.loadFeatures);
+// app.post('/features')
 
 /**
  *  Start of the Express server
