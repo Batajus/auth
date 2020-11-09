@@ -103,10 +103,6 @@ export class AuthService {
                 return true;
             }),
             catchError((error: HttpErrorResponse) => {
-                if (error.status === 401) {
-                    localStorage.removeItem('JWT');
-                }
-
                 return of(false);
             })
         );
