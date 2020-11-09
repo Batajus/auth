@@ -24,7 +24,7 @@ export class AuthService {
                 map((response: User) => {
                     this.user = new User();
                     Object.assign(this.user, response);
-                    this.user.roles = this.user.roles.map(r => Object.assign(new Role(), r));
+                    this.user.roles = this.user.roles.map((r) => Object.assign(new Role(), r));
 
                     localStorage.setItem('UserID', this.user.id);
                     localStorage.setItem('JWT', this.user.jwt);
@@ -70,14 +70,8 @@ export class AuthService {
             });
         }
 
-        const jwt = localStorage.getItem('JWT');
         const id = localStorage.getItem('UserID');
-
-        const headers = new HttpHeaders({
-            Authorization: `Bearer ${jwt}`
-        });
-
-        return this.http.get(`${this.url}/users/${id}`, { headers }).pipe(
+        return this.http.get(`${this.url}/users/${id}`).pipe(
             map((user: User) => {
                 this.user = Object.assign(new User(), user);
                 return this.user;
@@ -86,12 +80,7 @@ export class AuthService {
     }
 
     changePassword(password: string): Observable<boolean> {
-        const jwt = localStorage.getItem('JWT');
-        const headers = new HttpHeaders({
-            Authorization: `Bearer ${jwt}`
-        });
-
-        return this.http.put(`${this.url}/users/${this.user.id}/change-password`, { password }, { headers }).pipe(
+        return this.http.put(`${this.url}/users/${this.user.id}/change-password`, { password }).pipe(
             map(({ jwt }: { jwt: string }) => {
                 this.user.jwt = jwt;
                 localStorage.setItem('JWT', jwt);
@@ -105,35 +94,25 @@ export class AuthService {
      * It verifies the current JWT for its validity
      */
     isAuthorized(): Observable<boolean> {
-        return new Observable((s) => {
-            const jwt = localStorage.getItem('JWT');
-            const id = localStorage.getItem('UserID');
+        const id = localStorage.getItem('UserID');
 
-            const headers = new HttpHeaders({
-                Authorization: `Bearer ${jwt}`
-            });
-
-            const params = new HttpParams({ fromString: `id=${id}` });
-
-            return this.http.get(`${this.url}/auth/re-authorization`, { headers, params }).subscribe(
-                (response: { jwt: string }) => {
-                    localStorage.setItem('JWT', response.jwt);
-                    s.next(true);
-                },
-                (error: HttpErrorResponse) => {
-                    if (error.status === 401) {
-                        localStorage.removeItem('JWT');
-                    }
-
-                    s.next(false);
+        const params = new HttpParams({ fromString: `id=${id}` });
+        return this.http.get(`${this.url}/auth/re-authorization`, { params }).pipe(
+            map((response: { jwt: string }) => {
+                localStorage.setItem('JWT', response.jwt);
+                return true;
+            }),
+            catchError((error: HttpErrorResponse) => {
+                if (error.status === 401) {
+                    localStorage.removeItem('JWT');
                 }
-            );
-        });
+
+                return of(false);
+            })
+        );
     }
 
     get url(): string {
         return `http://${environment.host}:${environment.port}`;
     }
 }
-
-
