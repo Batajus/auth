@@ -101,7 +101,7 @@ export class RegistrationComponent implements OnInit {
                 )
             }),
             mail: this.fb.group({
-                email: ['', Validators.email]
+                email: ['', Validators.compose([Validators.required, Validators.email])]
             })
         });
     }

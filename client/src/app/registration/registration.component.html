@@ -37,7 +37,7 @@
                         </div>
 
                         <div>
-                            <button mat-button matStepperNext>Next</button>
+                            <button mat-raised-button color="primary" matStepperNext>Next</button>
                         </div>
                     </form>
                 </mat-step>
@@ -52,8 +52,8 @@
                             >
                         </mat-form-field>
                         <div>
-                            <button mat-button matStepperPrevious>Back</button>
-                            <button mat-button matStepperNext>Next</button>
+                            <button mat-button type="button" matStepperPrevious>Back</button>
+                            <button mat-raised-button color="primary" matStepperNext>Next</button>
                         </div>
                     </form>
                 </mat-step>
@@ -61,8 +61,8 @@
                     <ng-template matStepLabel>Done</ng-template>
                     <p>You are now done.</p>
                     <div>
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button type="submit">Submit</button>
+                        <button mat-button type="button" matStepperPrevious>Back</button>
+                        <button mat-raised-button color="primary" type="submit">Submit</button>
                     </div>
                 </mat-step>
             </mat-vertical-stepper>
