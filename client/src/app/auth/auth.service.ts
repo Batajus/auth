@@ -4,6 +4,7 @@ import { ValidationErrors } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { User, Role } from '../models/User';
 
 @Injectable({
     providedIn: 'root'
@@ -135,17 +136,4 @@ export class AuthService {
     }
 }
 
-export class User {
-    id: string;
-    jwt: string;
-    constructor(
-        public username: string = null,
-        public email: string = null,
-        public password: string = null,
-        public roles: Role[] = []
-    ) {}
-}
 
-export class Role {
-    constructor(public name: string = null) {}
-}

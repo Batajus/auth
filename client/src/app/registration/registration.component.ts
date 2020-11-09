@@ -5,7 +5,8 @@ import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStep } from '@angular/material/stepper';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
+import { User } from "../models/User";
 import { CustomValidators } from '../helper/Validators';
 
 @Component({

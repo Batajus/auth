@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
+import { User } from "../models/User";
 import { LogoutComponent } from '../logout/logout.component';
 import { NavigationObject } from './administration.api';
 

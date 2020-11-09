@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AuthService, User } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from "src/app/models/User";
 import { CustomValidators } from 'src/app/helper/Validators';
 
 @Component({

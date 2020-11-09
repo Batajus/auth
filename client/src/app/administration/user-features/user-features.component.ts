@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Feature } from './features.api';
+import { Feature } from '../../models/Feature';
 
 @Component({
     selector: 'user-features-component',
@@ -8,15 +8,13 @@ import { Feature } from './features.api';
     styleUrls: ['user-features.component.scss']
 })
 export class UserFeaturesComponent {
-    enrolledFeatures: any[] = [1, 2, 3, 4];
-
-    usedFeatures: UIFeatureContext;
+    registeredFeatures: UIFeatureContext;
     notUsedFeatures: UIFeatureContext;
 
     constructor(private auth: AuthService) {}
 
     ngOnInit() {
-        this.usedFeatures = new UIFeatureContext([], 'You are not using any features.');
+        this.registeredFeatures = new UIFeatureContext([], 'You are not using any features.');
         this.notUsedFeatures = new UIFeatureContext([], 'There are no features, which you are not using.');
     }
 }
