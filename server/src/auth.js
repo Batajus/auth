@@ -15,7 +15,7 @@ function login(req, res) {
         return res.sendStatus(500);
     }
 
-    User.findOne({ username: req.body.username }).then(user => {
+    User.findOne({ username: req.body.username }).then(async user => {
         if (!user) {
             return res.sendStatus(401);
         }
