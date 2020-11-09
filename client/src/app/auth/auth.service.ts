@@ -23,6 +23,7 @@ export class AuthService {
                 map((response: User) => {
                     this.user = new User();
                     Object.assign(this.user, response);
+                    this.user.roles = this.user.roles.map(r => Object.assign(new Role(), r));
 
                     localStorage.setItem('UserID', this.user.id);
                     localStorage.setItem('JWT', this.user.jwt);
@@ -89,7 +90,7 @@ export class AuthService {
             Authorization: `Bearer ${jwt}`
         });
 
-        return this.http.post(`${this.url}/users/${this.user.id}/change-password`, { password }, { headers }).pipe(
+        return this.http.put(`${this.url}/users/${this.user.id}/change-password`, { password }, { headers }).pipe(
             map(({ jwt }: { jwt: string }) => {
                 this.user.jwt = jwt;
                 localStorage.setItem('JWT', jwt);
@@ -137,5 +138,14 @@ export class AuthService {
 export class User {
     id: string;
     jwt: string;
-    constructor(public username: string = null, public email: string = null, public password: string = null) {}
+    constructor(
+        public username: string = null,
+        public email: string = null,
+        public password: string = null,
+        public roles: Role[] = []
+    ) {}
+}
+
+export class Role {
+    constructor(public name: string = null) {}
 }

@@ -32,13 +32,13 @@ app.get('/auth/re-authorization', auth.verifyAuthorization, auth.reAuthoriatzion
  * Handles all request for/about users
  */
 app.get('/users/:id', auth.verifyAuthorization, user.getUsers);
-app.post('/users/:id/change-password', auth.verifyAuthorization, auth.changePassword);
+app.put('/users/:id/change-password', auth.verifyAuthorization, auth.changePassword);
 
 /**
  * Handles all request for/about features
  */
 app.get('/features', auth.verifyAuthorization, feature.loadFeatures);
-// app.post('/features')
+app.post('/features', auth.verifyAuthorization, feature.createFeature);
 
 /**
  *  Start of the Express server

@@ -1,6 +1,6 @@
 <div class="security-container">
     <div>
-        <form #test (submit)="submit()" [formGroup]="formGroup">
+        <form (ngSubmit)="submit()" [formGroup]="formGroup">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Change Password </mat-card-title>

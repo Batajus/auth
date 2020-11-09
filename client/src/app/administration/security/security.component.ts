@@ -25,13 +25,14 @@ export class SecurityComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.auth.ensureUserLoaded().subscribe((user) => {
-            if (!user) {
-                this.router.navigate(['']);
-            }
+        // TODO Neccessary???? 
+        // this.auth.ensureUserLoaded().subscribe((user) => {
+        //     if (!user) {
+        //         this.router.navigate(['']);
+        //     }        
+        //     this.user = user;
+        // });
 
-            this.user = user;
-        });
         this.formGroup = this.fb.group(
             {
                 password: new FormControl('', Validators.compose([Validators.required, CustomValidators.passwordValidator])),
@@ -58,7 +59,7 @@ export class SecurityComponent implements OnInit {
         this.passwordChangeInProgress = true;
 
         const formValue = this.formGroup.value;
-        this.auth.changePassword(formValue.passwords.password).subscribe((successful) => {
+        this.auth.changePassword(formValue.password).subscribe((successful) => {
             this.passwordChangeInProgress = false;
 
             if (!successful) {

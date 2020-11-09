@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 const feature = new Schema({
     name: String,
     description: String,
-    url: String
+    url: String,
+    activationKey: String
 });
 
-module.exports = mongoose.model('feature', feature);
+module.exports = mongoose.model('features', feature);

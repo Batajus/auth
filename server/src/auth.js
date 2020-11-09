@@ -2,6 +2,7 @@ const base64url = require('base64url');
 const crypto = require('crypto');
 
 const User = require('./schemas/user');
+const Role = require('./schemas/role');
 
 const ALGORITHM = 'HS256';
 const ITERATIONS = 10000;
@@ -14,7 +15,7 @@ function login(req, res) {
         return res.sendStatus(500);
     }
 
-    User.findOne({ username: req.body.username }).exec(function (err, user) {
+    User.findOne({ username: req.body.username }).then(user => {
         if (!user) {
             return res.sendStatus(401);
         }
@@ -24,12 +25,18 @@ function login(req, res) {
             return res.sendStatus(401);
         }
 
+        let roles = [];
+        if (user.roles && user.roles.length) {
+            roles =  await Role.find({ _id: { $in: user.roles } });
+        }
+
         const jwt = generateJWT(req.body.username);
         res.send({
             id: user._id,
             username: user.username,
             email: user.email,
-            jwt
+            jwt,
+            roles: roles
         });
     });
 }
@@ -43,8 +50,8 @@ function registration(req, res) {
     }
 
     const conflictPromises = Promise.all([
-        User.findOne({ username: req.body.username }).exec(),
-        User.findOne({ email: req.body.email }).exec()
+        User.findOne({ username: req.body.username }),
+        User.findOne({ email: req.body.email })
     ]);
 
     return conflictPromises.then(([conflictName, conflictMail]) => {

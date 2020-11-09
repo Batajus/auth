@@ -1,5 +1,8 @@
 const Feature = require('./schemas/feature');
 
+/**
+ * 
+ */
 function loadFeatures(req, res) {
     // TODO Implement Paging
     Feature.find({}).then(features => {
@@ -8,4 +11,12 @@ function loadFeatures(req, res) {
     });
 }
 
+/**
+ * 
+ */
+function createFeature(req, res) {
+
+}
+
 module.exports.loadFeatures = loadFeatures;
+module.exports.createFeature = createFeature;
