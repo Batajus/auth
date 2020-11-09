@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const feature = new Schema({
     name: String,
+    shortDescription: String,
     description: String,
     url: String,
     activationKey: String

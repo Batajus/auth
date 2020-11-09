@@ -1,13 +1,9 @@
 <mat-tab-group dynamicHeight mat-stretch-tabs>
     <mat-tab label="Used Features">
-        <ng-container
-            *ngTemplateOutlet="features; context: registeredFeatures"
-        ></ng-container>
+        <ng-container *ngTemplateOutlet="features; context: registeredFeatures"></ng-container>
     </mat-tab>
     <mat-tab label="Unused Features">
-        <ng-container
-            *ngTemplateOutlet="features; context: notUsedFeatures"
-        ></ng-container>
+        <ng-container *ngTemplateOutlet="features; context: notUsedFeatures"></ng-container>
     </mat-tab>
 </mat-tab-group>
 
@@ -18,16 +14,12 @@
                 <mat-card>
                     <mat-card-header>
                         <div mat-card-avatar class="example-header-image"></div>
-                        <mat-card-title>Shiba Inu</mat-card-title>
-                        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                        <mat-card-title>{{ feature.name }}</mat-card-title>
+                        <mat-card-subtitle>{{ feature.shortDescription }}</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
                         <p>
-                            The Shiba Inu is the smallest of the six original
-                            and distinct spitz breeds of dog from Japan. A
-                            small, agile dog that copes very well with
-                            mountainous terrain, the Shiba Inu was originally
-                            bred for hunting.
+                            {{ feature.description }}
                         </p>
                     </mat-card-content>
                 </mat-card>

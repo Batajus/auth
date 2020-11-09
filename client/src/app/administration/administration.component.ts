@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { User } from "../models/User";
+import { User } from '../models/User';
 import { LogoutComponent } from '../logout/logout.component';
 import { NavigationObject } from './administration.api';
 
@@ -39,10 +39,8 @@ export class AdministrationComponent {
         this.selectedNav = new NavigationObject('Features', 'features', 'view_module');
         this.navObjs = [
             this.selectedNav,
-            new NavigationObject('Security', 'security', 'security'),
+            new NavigationObject('Security', 'security', 'security')
             // new NavigationObject('GDPR', 'gdpr')
         ];
     }
 }
-
-

@@ -109,6 +109,6 @@ export class AuthService {
     }
 
     get url(): string {
-        return `http://${environment.host}:${environment.port}`;
+        return `${environment.protocol}://${environment.host}:${environment.port}`;
     }
 }
