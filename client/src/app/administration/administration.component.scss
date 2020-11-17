@@ -26,7 +26,6 @@
                     display: flex;
                     flex: 1;
                     align-items: center;
-                    justify-content: flex-end;
 
                     span,
                     mat-icon {
@@ -35,11 +34,10 @@
 
                     span {
                         font-size: 18px;
+                        padding-left: 16px;
+                        // padding-left: 40px;
                     }
 
-                    mat-icon {
-                        font-size: 20px;
-                    }
                 }
             }
 

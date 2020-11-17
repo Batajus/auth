@@ -5,13 +5,11 @@ import { AuthService } from '../auth/auth.service';
 @Component({
     selector: 'logout-component',
     template: ` <h1 mat-dialog-title>Logout</h1>
-        <div mat-dialog-content>Are you sure you want to logout?</div>
-        <div mat-dialog-actions>
-            <button mat-button mat-dialog-close (click)="logout()">
-                Logout
-            </button>
+        <mat-dialog-content>Are you sure you want to logout?</mat-dialog-content>
+        <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-        </div>`
+            <button mat-raised-button color="warn" mat-dialog-close (click)="logout()">Logout</button>
+        </mat-dialog-actions>`
 })
 export class LogoutComponent {
     constructor(private auth: AuthService, private router: Router) {}
