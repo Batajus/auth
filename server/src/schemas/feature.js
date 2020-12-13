@@ -7,7 +7,8 @@ const feature = new Schema({
     shortDescription: String,
     description: String,
     url: String,
-    activationKey: String
+    activationKey: String,
+    navigable: { type: Boolean, default: true }
 });
 
 module.exports = mongoose.model('features', feature);

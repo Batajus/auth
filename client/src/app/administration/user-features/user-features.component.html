@@ -1,4 +1,16 @@
-<mat-tab-group dynamicHeight mat-stretch-tabs>
+<div class="add-feature" *ngIf="('feature' | rights) | async">
+    <button
+        mat-mini-fab
+        (click)="openFeatureDialog()"
+        color="primary"
+        matTooltip="Opens dialog to add a feature"
+        matTooltipPosition="right"
+    >
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+
+<mat-tab-group dynamicHeight mat-stretch-tabs [selectedIndex]="selectedTab" (selectedTabChange)="tabChange($event)">
     <mat-tab label="Used Features">
         <ng-container *ngTemplateOutlet="features; context: registeredFeatures"></ng-container>
     </mat-tab>
@@ -18,6 +30,16 @@
                         <mat-card-subtitle>{{ feature.shortDescription }}</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
+                        <div class="feature-url" *ngIf="feature.url">
+                            <div>
+                                URL:
+                                <a href="https://{{ feature.url }}" *ngIf="feature.navigable">
+                                    {{ feature.url }}
+                                </a>
+                                <span *ngIf="!feature.navigable">{{ feature.url }}</span>
+                            </div>
+                            <button type="button" mat-button (click)="copyUrl(feature.url)">Copy</button>
+                        </div>
                         <p>
                             {{ feature.description }}
                         </p>
@@ -26,7 +48,7 @@
             </div>
         </ng-container>
         <ng-container *ngIf="!features.length">
-            <div>{{ placeholder }}</div>
+            <div class="no-feature">{{ placeholder }}</div>
         </ng-container>
     </div>
 </ng-template>

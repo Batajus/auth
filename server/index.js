@@ -25,20 +25,21 @@ app.use(bodyParser.json());
  *  Handles authentication and registration
  */
 app.post('/auth/login', auth.login);
-app.post('/auth/registration', auth.registration);
+app.put('/auth/registration', auth.registration);
 app.get('/auth/re-authorization', auth.verifyAuthorization, auth.reAuthoriatzion);
 
 /**
  * Handles all request for/about users
  */
 app.get('/users/:id', auth.verifyAuthorization, user.getUsers);
-app.put('/users/:id/change-password', auth.verifyAuthorization, auth.changePassword);
+app.post('/users/:id/change-password', auth.verifyAuthorization, auth.changePassword);
 
 /**
  * Handles all request for/about features
  */
 app.get('/features', auth.verifyAuthorization, feature.loadFeatures);
-app.post('/features', auth.verifyAuthorization, feature.createFeature);
+app.put('/features', auth.verifyAuthorization, feature.createFeature);
+app.post('/features/:id', auth.verifyAuthorization, feature.updateFeature);
 
 /**
  *  Start of the Express server

@@ -3,6 +3,8 @@ export class Feature {
 
     activationKey: string;
 
+    navigable = true;
+
     constructor(
         public name: string = null,
         public shortDescription: string = null,

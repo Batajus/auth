@@ -44,7 +44,7 @@ export class AuthService {
 
     register(user: User): Observable<void> {
         return this.http
-            .post(`${this.url}/auth/registration`, {
+            .put(`${this.url}/auth/registration`, {
                 username: user.username,
                 email: user.email,
                 password: user.password
@@ -80,7 +80,7 @@ export class AuthService {
     }
 
     changePassword(password: string): Observable<boolean> {
-        return this.http.put(`${this.url}/users/${this.user.id}/change-password`, { password }).pipe(
+        return this.http.post(`${this.url}/users/${this.user.id}/change-password`, { password }).pipe(
             map(({ jwt }: { jwt: string }) => {
                 this.user.jwt = jwt;
                 localStorage.setItem('JWT', jwt);

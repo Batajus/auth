@@ -1,0 +1,17 @@
+.first-line {
+    display: flex;
+
+    mat-form-field {
+        width: 50%;
+
+        &:not(:last-of-type) {
+            padding-right: 24px;
+        }
+    }
+}
+
+.fullWidthLine {
+    mat-form-field {
+        width: 100%;
+    }
+}

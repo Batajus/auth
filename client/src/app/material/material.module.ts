@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 const MATERIAL_MODULES = [
     MatCardModule,
@@ -30,7 +31,8 @@ const MATERIAL_MODULES = [
     MatCardModule,
     MatDialogModule,
     MatTabsModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatTooltipModule
 ];
 
 @NgModule({

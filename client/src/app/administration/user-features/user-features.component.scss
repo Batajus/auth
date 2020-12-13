@@ -1,13 +1,29 @@
+.add-feature {
+    position: absolute;
+    z-index: 2;
+    padding: 4px 4px;
+}
+
 .features {
     display: inline-grid;
-    grid-template-columns: auto auto auto;
-
-    padding: 16px;
+    grid-template-columns: 33.33% 33.33% 33.33%;
+    width: 100%;
 
     .feature {
         mat-card {
-            margin: 8px;
+            margin: 16px;
             background-color: #f5f5f5;
+
+            .feature-url{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
         }
+
+    }
+
+    .no-feature {
+        padding: 16px;
     }
 }

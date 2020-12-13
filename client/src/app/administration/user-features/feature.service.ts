@@ -19,6 +19,15 @@ export class FeatureService {
         );
     }
 
+    storeFeature(feature: Feature): Observable<any> {
+        // Create a new feature, if no id is available
+        if (!feature.id) {
+            return this.http.put(`${this.url}/features`, feature);
+        }
+        // Updates the given feature
+        return this.http.post(`${this.url}/features/${feature.id}`, feature);
+    }
+
     get url(): string {
         return `${environment.protocol}://${environment.host}:${environment.port}`;
     }

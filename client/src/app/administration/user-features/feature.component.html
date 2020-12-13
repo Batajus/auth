@@ -1,0 +1,44 @@
+<form (submit)="submit()" [formGroup]="formGroup">
+    <h1 mat-dialog-title>Feature</h1>
+    <mat-dialog-content>
+        <div class="first-line">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Name *</mat-label>
+                    <input matInput formControlName="name" placeholder="Name" />
+                    <mat-error *ngIf="formGroup.get('name').hasError('required')">The name is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>URL *</mat-label>
+                    <input matInput formControlName="url" placeholder="URL" />
+                    <mat-error *ngIf="formGroup.get('url').hasError('required')">The URL is required</mat-error>
+                </mat-form-field>
+        </div>
+
+        <div class="fullWidthLine">
+            <mat-form-field class="example-full-width">
+                <mat-label>Short description *</mat-label>
+                <input matInput formControlName="shortDescription" placeholder="Name" />
+                <mat-error *ngIf="formGroup.get('shortDescription').hasError('required')">
+                    The short description is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="fullWidthLine">
+            <mat-form-field class="example-full-width">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" placeholder="Description"></textarea>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Activation key</mat-label>
+            <input matInput formControlName="activationKey" placeholder="Activation key" />
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button type="button" mat-dialog-close>Cancel</button>
+        <button mat-raised-button color="primary">Submit</button>
+    </mat-dialog-actions>
+</form>
