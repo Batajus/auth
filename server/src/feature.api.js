@@ -56,7 +56,7 @@ function updateFeature(req, res) {
             Object.assign(feature, req.body);
 
             feature.save().then(() => {
-                res.send({ successful: trueF });
+                res.send({ successful: true });
             });
         })
         .catch((err) => {

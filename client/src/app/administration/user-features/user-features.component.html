@@ -1,4 +1,4 @@
-<div class="add-feature" *ngIf="('feature' | rights) | async">
+<div class="add-feature" *ngIf="'feature' | rights | async">
     <button
         mat-mini-fab
         (click)="openFeatureDialog()"
@@ -26,7 +26,12 @@
                 <mat-card>
                     <mat-card-header>
                         <div mat-card-avatar class="example-header-image"></div>
-                        <mat-card-title>{{ feature.name }}</mat-card-title>
+                        <mat-card-title>
+                            {{ feature.name }}
+                            <mat-icon (click)="openFeatureDialog(feature)" matTooltip="Opens dialog to edit the feature" matTooltipPosition="right">
+                                edit
+                            </mat-icon>
+                        </mat-card-title>
                         <mat-card-subtitle>{{ feature.shortDescription }}</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
@@ -38,7 +43,15 @@
                                 </a>
                                 <span *ngIf="!feature.navigable">{{ feature.url }}</span>
                             </div>
-                            <button type="button" mat-button (click)="copyUrl(feature.url)">Copy</button>
+                            <button
+                                type="button"
+                                mat-button
+                                (click)="copyUrl(feature.url)"
+                                matTooltip="Copies the url into your clipboard"
+                                matTooltipPosition="right"
+                            >
+                                Copy
+                            </button>
                         </div>
                         <p>
                             {{ feature.description }}

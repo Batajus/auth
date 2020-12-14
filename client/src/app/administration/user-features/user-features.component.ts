@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,8 @@ import { FeatureService } from './feature.service';
 @Component({
     selector: 'user-features-component',
     templateUrl: `user-features.component.html`,
-    styleUrls: ['user-features.component.scss']
+    styleUrls: ['user-features.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class UserFeaturesComponent {
     registeredFeatures: UIFeature;

@@ -21,11 +21,11 @@ export class FeatureService {
 
     storeFeature(feature: Feature): Observable<any> {
         // Create a new feature, if no id is available
-        if (!feature.id) {
+        if (!feature._id) {
             return this.http.put(`${this.url}/features`, feature);
         }
         // Updates the given feature
-        return this.http.post(`${this.url}/features/${feature.id}`, feature);
+        return this.http.post(`${this.url}/features/${feature._id}`, feature);
     }
 
     get url(): string {

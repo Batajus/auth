@@ -1,5 +1,5 @@
 export class Feature {
-    id: string;
+    _id: string;
 
     activationKey: string;
 
