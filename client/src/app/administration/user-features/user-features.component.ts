@@ -39,7 +39,7 @@ export class UserFeaturesComponent {
             // TODO Implement paging
             this.featureService.loadFeatures().subscribe((features) => {
                 features.forEach((feature) => {
-                    if (user.features.includes(feature.id)) {
+                    if (user.features.includes(feature._id)) {
                         return this.registeredFeatures.features.push(feature);
                     }
                     this.notUsedFeatures.features.push(feature);

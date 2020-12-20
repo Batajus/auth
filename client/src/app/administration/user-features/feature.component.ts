@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Feature } from 'src/app/models/Feature';
 import { FeatureService } from './feature.service';
@@ -29,7 +29,8 @@ export class FeatureComponent implements OnInit {
             url: [this.feature.url, Validators.required],
             shortDescription: [this.feature.shortDescription, Validators.required],
             description: [this.feature.description],
-            activationKey: [this.feature.activationKey],
+            // Solution to disable this kind of feature -> https://stackoverflow.com/a/48451375/4661771
+            activationKey: new FormControl({ value: this.feature.activationKey, disabled: true }),
             navigable: [this.feature.navigable]
         });
     }
