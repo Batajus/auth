@@ -2,8 +2,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { userInfo } from 'os';
-import { features } from 'process';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/models/User';
 import { UserService } from 'src/app/user/user.service';
