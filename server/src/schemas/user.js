@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const role = require('./role')
+const role = require('./role');
 
 const Schema = mongoose.Schema;
 
@@ -8,7 +8,8 @@ const user = new Schema({
     email: String,
     password: Buffer,
     salt: String,
-    roles: [mongoose.ObjectId]
+    roles: [mongoose.ObjectId],
+    features: [mongoose.ObjectId]
 });
 
 module.exports = mongoose.model('users', user);

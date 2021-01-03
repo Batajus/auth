@@ -23,7 +23,7 @@
     <div class="features">
         <ng-container *ngIf="features.length > 0">
             <div class="feature" *ngFor="let feature of features; let i = index">
-                <mat-card>
+                <mat-card (click)="activateFeature(feature, i)">
                     <mat-card-header>
                         <div mat-card-avatar class="example-header-image"></div>
                         <mat-card-title>
@@ -31,14 +31,14 @@
 
                             <div>
                                 <mat-icon
-                                    (click)="openFeatureDialog(feature)"
+                                    (click)="$event.stopImmediatePropagation(); openFeatureDialog(feature)"
                                     matTooltip="Opens dialog to edit the feature"
                                     matTooltipPosition="right"
                                 >
                                     edit
                                 </mat-icon>
                                 <mat-icon
-                                    (click)="deleteFeature(features, feature, i)"
+                                    (click)="$event.stopImmediatePropagation(); deleteFeature(features, feature, i)"
                                     matTooltip="Delete this feature"
                                     matTooltipPosition="right"
                                 >

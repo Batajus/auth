@@ -2,8 +2,11 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { userInfo } from 'os';
 import { features } from 'process';
 import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/models/User';
+import { UserService } from 'src/app/user/user.service';
 import { Feature } from '../../models/Feature';
 import { FeatureDeletionComponent } from './feature-deletion.component';
 import { FeatureComponent } from './feature.component';
@@ -21,12 +24,15 @@ export class UserFeaturesComponent {
 
     selectedTab: number = null;
 
+    private user: User;
+
     constructor(
         private auth: AuthService,
         private featureService: FeatureService,
         private dialog: MatDialog,
         private router: Router,
-        private activeRoute: ActivatedRoute
+        private activeRoute: ActivatedRoute,
+        private userService: UserService
     ) {}
 
     ngOnInit() {
@@ -38,6 +44,7 @@ export class UserFeaturesComponent {
         this.notUsedFeatures = new UIFeature([], 'There are no features, which you are not using.');
 
         this.auth.ensureUserLoaded().subscribe((user) => {
+            this.user = user;
             // TODO Implement paging
             this.featureService.loadFeatures().subscribe((features) => {
                 features.forEach((feature) => {
@@ -79,6 +86,19 @@ export class UserFeaturesComponent {
             if (successful) {
                 features.splice(idx, 1);
             }
+        });
+    }
+
+    activateFeature(feature: Feature, idx: number) {
+        if (this.user.features.includes(feature._id)) {
+            return;
+        }
+
+        this.user.features.push(feature._id);
+
+        return this.userService.activateFeature(this.user).subscribe(() => {
+            this.notUsedFeatures.features.splice(idx, 1);
+            this.registeredFeatures.features.push(feature);
         });
     }
 }
