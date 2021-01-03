@@ -2,8 +2,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { features } from 'process';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Feature } from '../../models/Feature';
+import { FeatureDeletionComponent } from './feature-deletion.component';
 import { FeatureComponent } from './feature.component';
 import { FeatureService } from './feature.service';
 
@@ -63,6 +65,18 @@ export class UserFeaturesComponent {
             autoFocus: false,
             width: '600px',
             data: { feature }
+        });
+    }
+
+    deleteFeature(features: Feature[], feature: Feature, idx: number) {
+        const ref = this.dialog.open(FeatureDeletionComponent, {
+            autoFocus: false,
+            data: { feature }
+        });
+
+        const subs = ref.afterClosed().subscribe(() => {
+            subs.unsubscribe();
+            features.splice(idx, 1);
         });
     }
 }

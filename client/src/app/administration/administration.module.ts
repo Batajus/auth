@@ -9,9 +9,17 @@ import { SecurityComponent } from './security/security.component';
 import { SharedModule } from '../shared/shared.module';
 import { FeatureComponent } from './user-features/feature.component';
 import { RightsPipe } from '../auth/rights.pipe';
+import { FeatureDeletionComponent } from './user-features/feature-deletion.component';
 
 @NgModule({
-    declarations: [AdministrationComponent, UserFeaturesComponent, SecurityComponent, FeatureComponent, RightsPipe],
+    declarations: [
+        AdministrationComponent,
+        UserFeaturesComponent,
+        SecurityComponent,
+        FeatureComponent,
+        RightsPipe,
+        FeatureDeletionComponent
+    ],
     imports: [CommonModule, ReactiveFormsModule, MaterialModule, AdministrationRoutingModule, SharedModule],
     providers: []
 })

@@ -1,5 +1,7 @@
 const { update } = require('./schemas/feature');
 const Feature = require('./schemas/feature');
+const auth = require('./auth');
+const mongodb = require('mongodb');
 
 /**
  *
@@ -55,7 +57,7 @@ function updateFeature(req, res) {
         .then((feature) => {
             Object.assign(feature, req.body);
 
-            feature.save().then(() => {
+            return feature.save().then(() => {
                 res.send({ successful: true });
             });
         })
@@ -65,6 +67,28 @@ function updateFeature(req, res) {
         });
 }
 
+/**
+ * Deletes the given feature
+ */
+function deleteFeature(req, res) {
+    return auth.getUserRoles(req).then((roles) => {
+        if (!roles.length || !roles.some((r) => r.name === 'admin')) {
+            return res.sendStatus(403);
+        }
+
+        return Feature.deleteOne({ _id: new mongodb.ObjectID(req.params.id) }).then(
+            () => {
+                res.send({ successful: true });
+            },
+            (err) => {
+                console.error(err);
+                res.sendStatus(501);
+            }
+        );
+    });
+}
+
 module.exports.loadFeatures = loadFeatures;
 module.exports.createFeature = createFeature;
 module.exports.updateFeature = updateFeature;
+module.exports.deleteFeature = deleteFeature;

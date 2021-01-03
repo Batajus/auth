@@ -15,7 +15,7 @@ function login(req, res) {
         return res.sendStatus(500);
     }
 
-    User.findOne({ username: req.body.username }).then(async user => {
+    User.findOne({ username: req.body.username }).then(async (user) => {
         if (!user) {
             return res.sendStatus(401);
         }
@@ -27,10 +27,10 @@ function login(req, res) {
 
         let roles = [];
         if (user.roles && user.roles.length) {
-            roles =  await Role.find({ _id: { $in: user.roles } });
+            roles = await Role.find({ _id: { $in: user.roles } });
         }
 
-        const jwt = generateJWT(req.body.username);
+        const jwt = generateJWT(user);
         res.send({
             id: user._id,
             username: user.username,
@@ -78,7 +78,7 @@ function registration(req, res) {
                 return res.sendStatus(500);
             }
 
-            const jwt = generateJWT(user.username);
+            const jwt = generateJWT(user);
 
             res.send({ id: user._id, jwt });
         });
@@ -100,7 +100,7 @@ function changePassword(req, res) {
                 }
 
                 // If the password change was successful return a new token
-                const jwt = generateJWT(user.username);
+                const jwt = generateJWT(user);
                 res.send({ jwt });
             });
         },
@@ -109,6 +109,22 @@ function changePassword(req, res) {
             return res.sendStatus(401);
         }
     );
+}
+
+/**
+ * Loads all roles for the given user id
+ */
+function getUserRoles(req) {
+    const id = getPayload(req).id;
+
+    return User.findById(id).then(async (user) => {
+        let roles = [];
+        if (user.roles && user.roles.length) {
+            roles = await Role.find({ _id: { $in: user.roles } });
+        }
+
+        return roles;
+    });
 }
 
 /**
@@ -121,7 +137,7 @@ function reAuthoriatzion(req, res) {
     }
 
     return User.findById(req.query.id).then((user) => {
-        res.send({ jwt: generateJWT(user.username) });
+        res.send({ jwt: generateJWT(user) });
     });
 }
 
@@ -151,7 +167,7 @@ function verifyAuthorization(req, res, next) {
 /**
  * Generates a valid JSON Web Token
  */
-function generateJWT(username) {
+function generateJWT(user) {
     const header = {
         alg: ALGORITHM,
         typ: 'JWT'
@@ -160,7 +176,8 @@ function generateJWT(username) {
     const payload = {
         auth_time: Date.now(),
         exp: Date.now() + 30 * 60 * 1000,
-        nickname: username
+        nickname: user.username,
+        id: user._id
     };
 
     const preSignature = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(payload))}`;
@@ -168,6 +185,18 @@ function generateJWT(username) {
     const signature = crypto.createHmac('sha256', process.env.JWT_SECRET).update(preSignature).digest('hex');
 
     return `${preSignature}.${signature}`;
+}
+
+/**
+ * Decodes the payload of the received JWT
+ */
+function getPayload(req) {
+    const authHeader = req.headers.authorization;
+    const [, token] = authHeader && authHeader.split(' ');
+
+    const [, payload, _] = token.split('.');
+
+    return JSON.parse(base64url.decode(payload));
 }
 
 /**
@@ -226,3 +255,4 @@ module.exports.registration = registration;
 module.exports.verifyAuthorization = verifyAuthorization;
 module.exports.reAuthoriatzion = reAuthoriatzion;
 module.exports.changePassword = changePassword;
+module.exports.getUserRoles = getUserRoles;

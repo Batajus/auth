@@ -28,6 +28,14 @@ export class FeatureService {
         return this.http.post(`${this.url}/features/${feature._id}`, feature);
     }
 
+    deleteFeature(feature: Feature): Observable<boolean> {
+        return this.http.delete(`${this.url}/features/${feature._id}`).pipe(
+            map((res: { successful: boolean }) => {
+                return res.successful;
+            })
+        );
+    }
+
     get url(): string {
         return `${environment.protocol}://${environment.host}:${environment.port}`;
     }

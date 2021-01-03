@@ -40,6 +40,7 @@ app.post('/users/:id/change-password', auth.verifyAuthorization, auth.changePass
 app.get('/features', auth.verifyAuthorization, feature.loadFeatures);
 app.put('/features', auth.verifyAuthorization, feature.createFeature);
 app.post('/features/:id', auth.verifyAuthorization, feature.updateFeature);
+app.delete('/features/:id', auth.verifyAuthorization, feature.deleteFeature);
 
 /**
  *  Start of the Express server

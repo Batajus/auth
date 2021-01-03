@@ -22,15 +22,29 @@
 <ng-template #features let-features="features" let-placeholder="placeholder">
     <div class="features">
         <ng-container *ngIf="features.length > 0">
-            <div class="feature" *ngFor="let feature of features">
+            <div class="feature" *ngFor="let feature of features; let i = index">
                 <mat-card>
                     <mat-card-header>
                         <div mat-card-avatar class="example-header-image"></div>
                         <mat-card-title>
                             {{ feature.name }}
-                            <mat-icon (click)="openFeatureDialog(feature)" matTooltip="Opens dialog to edit the feature" matTooltipPosition="right">
-                                edit
-                            </mat-icon>
+
+                            <div>
+                                <mat-icon
+                                    (click)="openFeatureDialog(feature)"
+                                    matTooltip="Opens dialog to edit the feature"
+                                    matTooltipPosition="right"
+                                >
+                                    edit
+                                </mat-icon>
+                                <mat-icon
+                                    (click)="deleteFeature(features, feature, i)"
+                                    matTooltip="Delete this feature"
+                                    matTooltipPosition="right"
+                                >
+                                    delete
+                                </mat-icon>
+                            </div>
                         </mat-card-title>
                         <mat-card-subtitle>{{ feature.shortDescription }}</mat-card-subtitle>
                     </mat-card-header>
