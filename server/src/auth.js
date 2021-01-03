@@ -36,7 +36,8 @@ function login(req, res) {
             username: user.username,
             email: user.email,
             jwt,
-            roles: roles
+            roles: roles,
+            features: user.features
         });
     });
 }
