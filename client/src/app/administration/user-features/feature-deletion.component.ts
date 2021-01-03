@@ -29,7 +29,7 @@ export class FeatureDeletionComponent {
                 });
                 return;
             }
-            this.dialogRef.close();
+            this.dialogRef.close(true);
         })
     }
 }

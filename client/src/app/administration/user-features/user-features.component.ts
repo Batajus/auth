@@ -74,9 +74,11 @@ export class UserFeaturesComponent {
             data: { feature }
         });
 
-        const subs = ref.afterClosed().subscribe(() => {
+        const subs = ref.afterClosed().subscribe((successful) => {
             subs.unsubscribe();
-            features.splice(idx, 1);
+            if (successful) {
+                features.splice(idx, 1);
+            }
         });
     }
 }
