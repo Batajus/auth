@@ -1,7 +1,7 @@
 <form (submit)="submit()" [formGroup]="formGroup">
     <h1 mat-dialog-title>Feature</h1>
     <mat-dialog-content>
-        <div class="first-line">
+        <div class="dual-line">
             <mat-form-field class="example-full-width">
                 <mat-label>Name *</mat-label>
                 <input matInput formControlName="name" placeholder="Name" />
@@ -32,10 +32,14 @@
             </mat-form-field>
         </div>
 
-        <mat-form-field class="example-full-width">
-            <mat-label>Activation key</mat-label>
-            <input matInput formControlName="activationKey" placeholder="Activation key" />
-        </mat-form-field>
+        <div class="dual-line with-checkbox">
+            <mat-form-field class="example-full-width">
+                <mat-label>Activation key</mat-label>
+                <input matInput formControlName="activationKey" placeholder="Activation key" />
+            </mat-form-field>
+
+            <mat-checkbox formControlName="navigable">Navigable</mat-checkbox>
+        </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button mat-button type="button" mat-dialog-close>Cancel</button>
