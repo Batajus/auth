@@ -34,6 +34,7 @@ app.get('/auth/re-authorization', auth.verifyAuthorization, auth.reAuthoriatzion
 app.get('/users/:id', auth.verifyAuthorization, user.getUsers);
 app.post('/users/:id/change-password', auth.verifyAuthorization, auth.changePassword);
 app.post('/users/:id/features', auth.verifyAuthorization, user.activateFeature);
+app.delete('/users/:id', auth.verifyAuthorization, user.deleteAccount);
 
 /**
  * Handles all request for/about features

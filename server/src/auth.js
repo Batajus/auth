@@ -31,6 +31,7 @@ function login(req, res) {
         }
 
         const jwt = generateJWT(user);
+        // TODO #9 - Use a generalized way to return the user 
         res.send({
             id: user._id,
             username: user.username,

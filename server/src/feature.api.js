@@ -76,7 +76,7 @@ function deleteFeature(req, res) {
             return res.sendStatus(403);
         }
 
-        return Feature.deleteOne({ _id: new mongodb.ObjectID(req.params.id) }).then(
+        return Feature.deleteOne({ _id: req.params.id }).then(
             () => {
                 res.send({ successful: true });
             },

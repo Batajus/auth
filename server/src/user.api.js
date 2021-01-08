@@ -31,5 +31,12 @@ function activateFeature(req, res) {
     });
 }
 
+function deleteAccount(req, res) {
+    return User.deleteOne({ _id: req.params.id }).then(() => {
+        res.send({});
+    });
+}
+
 module.exports.getUsers = getUsers;
 module.exports.activateFeature = activateFeature;
+module.exports.deleteAccount = deleteAccount;

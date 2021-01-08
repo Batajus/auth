@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdministrationComponent } from './administration.component';
+import { GDPRComponent } from './gdpr/gdpr.component';
 import { SecurityComponent } from './security/security.component';
 import { UserFeaturesComponent } from './user-features/user-features.component';
 
@@ -20,6 +21,10 @@ const routes: Routes = [
             {
                 path: 'security',
                 component: SecurityComponent
+            },
+            {
+                path: 'gdpr',
+                component: GDPRComponent
             }
         ]
     }

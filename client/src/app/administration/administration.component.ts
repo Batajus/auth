@@ -39,8 +39,8 @@ export class AdministrationComponent {
         this.selectedNav = new NavigationObject('Features', 'features', 'view_module');
         this.navObjs = [
             this.selectedNav,
-            new NavigationObject('Security', 'security', 'security')
-            // new NavigationObject('GDPR', 'gdpr')
+            new NavigationObject('Security', 'security', 'security'),
+            new NavigationObject('GDPR', 'gdpr', 'privacy_tip')
         ];
     }
 }
