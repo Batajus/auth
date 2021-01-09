@@ -1,5 +1,6 @@
 const User = require('./schemas/user');
 const Role = require('./schemas/role');
+const Feature = require('./schemas/feature');
 
 /**
  * Loads the respective user by  its id
@@ -31,6 +32,13 @@ function activateFeature(req, res) {
     });
 }
 
+function loadFeatures(req, res) {
+    const ids = req.query.ids.split(',');
+    return Feature.find({ _id: { $in: ids } }).then((features) => {
+        res.send(features);
+    });
+}
+
 function deleteAccount(req, res) {
     return User.deleteOne({ _id: req.params.id })
         .then(() => {
@@ -44,3 +52,4 @@ function deleteAccount(req, res) {
 module.exports.getUsers = getUsers;
 module.exports.activateFeature = activateFeature;
 module.exports.deleteAccount = deleteAccount;
+module.exports.loadFeatures = loadFeatures;

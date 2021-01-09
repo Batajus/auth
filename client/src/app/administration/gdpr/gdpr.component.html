@@ -1,6 +1,41 @@
-<h1>GDPR Content</h1>
+<div class="gdpr-container">
+    <div class="header">
+        Data Protection
+    </div>
 
-<div>
-    Do you want to delete your whole account? 
-    <button mat-raised-button color="warn" (click)="confirmAccountDeletion()">Delete</button>
+    <mat-accordion multi>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Personal data </mat-panel-title>
+                <mat-panel-description> List of all personal data, which have been saved </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="gdpr-personal-data">
+                <div>Username:</div>
+                <div>{{ user?.username }}</div>
+            </div>
+            <div class="gdpr-personal-data">
+                <div>E-Mail:</div>
+                <div>{{ user?.email }}</div>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Features ({{ features?.length }}) </mat-panel-title>
+                <mat-panel-description> List of all features, which have been used </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div>
+                <ng-container *ngFor="let feature of features; let last = last">
+                    <span matTooltip="{{ feature.shortDescription }}">{{ feature.name }}</span>
+                    <span *ngIf="!last">,&nbsp;</span>
+                </ng-container>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Account Deletion </mat-panel-title>
+            </mat-expansion-panel-header>
+            <b>Do you want to delete your whole account?</b>&nbsp;
+            <button mat-raised-button color="warn" (click)="confirmAccountDeletion()">Delete</button>
+        </mat-expansion-panel>
+    </mat-accordion>
 </div>

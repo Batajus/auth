@@ -19,13 +19,13 @@ export class FeatureService {
         );
     }
 
-    storeFeature(feature: Feature): Observable<any> {
+    storeFeature(feature: Feature): Observable<void> {
         // Create a new feature, if no id is available
         if (!feature._id) {
-            return this.http.put(`${this.url}/features`, feature);
+            return this.http.put<void>(`${this.url}/features`, feature);
         }
         // Updates the given feature
-        return this.http.post(`${this.url}/features/${feature._id}`, feature);
+        return this.http.post<void>(`${this.url}/features/${feature._id}`, feature);
     }
 
     deleteFeature(feature: Feature): Observable<boolean> {

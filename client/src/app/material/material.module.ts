@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const MATERIAL_MODULES = [
     MatCardModule,
@@ -34,7 +35,8 @@ const MATERIAL_MODULES = [
     MatTabsModule,
     MatBadgeModule,
     MatTooltipModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule
 ];
 
 @NgModule({

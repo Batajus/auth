@@ -40,7 +40,7 @@ export class AdministrationComponent {
         this.navObjs = [
             this.selectedNav,
             new NavigationObject('Security', 'security', 'security'),
-            new NavigationObject('GDPR', 'gdpr', 'privacy_tip')
+            new NavigationObject('Data protection', 'gdpr', 'privacy_tip')
         ];
     }
 }

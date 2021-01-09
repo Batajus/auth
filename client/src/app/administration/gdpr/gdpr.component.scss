@@ -1,0 +1,23 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.gdpr-container {
+    padding: 24px;
+
+    .header {
+        padding-bottom: 24px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .gdpr-personal-data {
+        display: grid;
+        grid-template-columns: 10% 90%;
+
+        div:first-of-type {
+            font-weight: bold;
+        }
+    }
+}
