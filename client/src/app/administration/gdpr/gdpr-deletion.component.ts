@@ -11,11 +11,15 @@ import { GDPRService } from './gdpr.service';
             >Are you sure you want to delete your account? This operation is irreversible!</mat-dialog-content
         >
         <mat-dialog-actions align="end">
-            <button mat-button mat-dialog-close>Abort</button>
-            <button mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
+            <button mat-button mat-dialog-close [disabled]="inProgress">Abort</button>
+            <button mat-raised-button color="warn" [disabled]="inProgress" (click)="deleteAccount()">
+                Delete Account
+            </button>
         </mat-dialog-actions>`
 })
 export class GDPRDeletionComponent {
+    inProgress: boolean = false;
+
     constructor(
         private router: Router,
         private gdprService: GDPRService,
@@ -24,10 +28,17 @@ export class GDPRDeletionComponent {
     ) {}
 
     deleteAccount() {
-        this.gdprService.deleteAccount().subscribe(() => {
-            this.dialogRef.close();
-            this.snackBar.open('Your Account is successfully deleted.', null, { duration: 3000 });
-            this.router.navigate(['/']);
-        });
+        this.inProgress = true;
+        this.gdprService.deleteAccount().subscribe(
+            () => {
+                this.dialogRef.close();
+                this.snackBar.open('Your Account is successfully deleted.', null, { duration: 3000 });
+                this.router.navigate(['/']);
+            },
+            (err) => {
+                console.error(err);
+                this.inProgress = false;
+            }
+        );
     }
 }

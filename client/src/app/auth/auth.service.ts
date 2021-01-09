@@ -66,7 +66,6 @@ export class AuthService {
             return new Observable((s) => {
                 s.next(this.user);
                 s.complete();
-                s.unsubscribe();
             });
         }
 

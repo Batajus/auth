@@ -32,9 +32,13 @@ function activateFeature(req, res) {
 }
 
 function deleteAccount(req, res) {
-    return User.deleteOne({ _id: req.params.id }).then(() => {
-        res.send({});
-    });
+    return User.deleteOne({ _id: req.params.id })
+        .then(() => {
+            res.send({});
+        })
+        .catch((err) => {
+            console.error(err);
+        });
 }
 
 module.exports.getUsers = getUsers;

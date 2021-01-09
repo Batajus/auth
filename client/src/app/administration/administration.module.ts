@@ -12,6 +12,7 @@ import { RightsPipe } from '../auth/rights.pipe';
 import { FeatureDeletionComponent } from './user-features/feature-deletion.component';
 import { GDPRComponent } from './gdpr/gdpr.component';
 import { GDPRDeletionComponent } from './gdpr/gdpr-deletion.component';
+import { GDPRService } from './gdpr/gdpr.service';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,9 @@ import { GDPRDeletionComponent } from './gdpr/gdpr-deletion.component';
         GDPRDeletionComponent
     ],
     imports: [CommonModule, ReactiveFormsModule, MaterialModule, AdministrationRoutingModule, SharedModule],
-    providers: []
+    providers: [
+        // Needs to be provided here, because of a circular dependencies due to the imports
+        GDPRService
+    ]
 })
 export class AdministrationModule {}
