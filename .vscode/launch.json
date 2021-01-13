@@ -11,7 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\server\\index.js"
+            "preLaunchTask": "Compile Server",
+            "program": "${workspaceFolder}/server/index.ts"
         }
     ]
 }

@@ -1,16 +1,26 @@
+import { NextFunction, Request, Response } from 'express';
+
+import express from 'express';
+const router = express.Router();
+
+import Role from './schemas/role';
+import { IRole } from './schemas/role';
+
+import User from './schemas/user';
+import { IUser } from './schemas/user';
+
 const base64url = require('base64url');
 const crypto = require('crypto');
-
-const User = require('./schemas/user');
-const Role = require('./schemas/role');
 
 const ALGORITHM = 'HS256';
 const ITERATIONS = 10000;
 
 /**
+ * Performs the login operation
  *
+ * Creates a JWT, if the given username and password were correct
  */
-function login(req, res) {
+function login(req: Request, res: Response) {
     if (!req.body || !Object.keys(req.body).length) {
         return res.sendStatus(500);
     }
@@ -20,18 +30,18 @@ function login(req, res) {
             return res.sendStatus(401);
         }
 
-        const hash = crypto.pbkdf2Sync(req.body.password, user.salt, ITERATIONS, 256, 'sha256');
+        const hash = hashPassword(req.body.password, user.salt);
         if (Buffer.compare(hash, user.password) != 0) {
             return res.sendStatus(401);
         }
 
-        let roles = [];
+        let roles: IRole[] = [];
         if (user.roles && user.roles.length) {
             roles = await Role.find({ _id: { $in: user.roles } });
         }
 
         const jwt = generateJWT(user);
-        // TODO #9 - Use a generalized way to return the user 
+        // TODO #9 - Use a generalized way to return the user
         res.send({
             id: user._id,
             username: user.username,
@@ -44,9 +54,13 @@ function login(req, res) {
 }
 
 /**
+ * Registers a new user
  *
+ * Returns an error, if either the username or the email is already taken
+ *
+ * Otherwise the user will be saved and logged in
  */
-function registration(req, res) {
+function registration(req: Request, res: Response) {
     if (!req.body || !Object.keys(req.body).length) {
         return res.sendStatus(500);
     }
@@ -65,7 +79,7 @@ function registration(req, res) {
         }
 
         const salt = crypto.randomBytes(256).toString('base64');
-        const password = crypto.pbkdf2Sync(req.body.password, salt, ITERATIONS, 256, 'sha256');
+        const password = hashPassword(req.body.password, salt);
 
         const user = new User({
             username: req.body.username,
@@ -74,53 +88,31 @@ function registration(req, res) {
             salt
         });
 
-        user.save(function (err) {
-            if (err) {
+        return user.save().then(
+            () => {
+                const jwt = generateJWT(user);
+                res.send({ id: user._id, jwt });
+            },
+            (err: Error) => {
                 console.error(err);
                 return res.sendStatus(500);
             }
-
-            const jwt = generateJWT(user);
-
-            res.send({ id: user._id, jwt });
-        });
+        );
     });
-}
-
-function changePassword(req, res) {
-    if (!req.body || !Object.keys(req.body).length) {
-        return res.sendStatus(500);
-    }
-
-    return User.findById(req.params.id).then(
-        (user) => {
-            user.password = crypto.pbkdf2Sync(req.body.password, user.salt, ITERATIONS, 256, 'sha256');
-            user.save(function (err) {
-                if (err) {
-                    console.error(err);
-                    return res.sendStatus(500);
-                }
-
-                // If the password change was successful return a new token
-                const jwt = generateJWT(user);
-                res.send({ jwt });
-            });
-        },
-        (err) => {
-            console.error(err);
-            return res.sendStatus(401);
-        }
-    );
 }
 
 /**
  * Loads all roles for the given user id
  */
-function getUserRoles(req) {
+export function getUserRoles(req: Request): Promise<IRole[]> {
     const id = getPayload(req).id;
 
     return User.findById(id).then(async (user) => {
-        let roles = [];
+        if (!user) {
+            throw new Error(`Missing user for id ${id}`);
+        }
+
+        let roles: IRole[] = [];
         if (user.roles && user.roles.length) {
             roles = await Role.find({ _id: { $in: user.roles } });
         }
@@ -133,12 +125,16 @@ function getUserRoles(req) {
  * Verfies if the authorization of a user is still valid
  * If JWT is valid the expiration time is updated and will be returned
  */
-function reAuthoriatzion(req, res) {
+export function reAuthoriatzion(req: Request, res: Response) {
     if (!req.query.id) {
         return res.sendStatus(500);
     }
 
     return User.findById(req.query.id).then((user) => {
+        if (!user) {
+            throw new Error(`Missing user for id ${req.params.id}`);
+        }
+
         res.send({ jwt: generateJWT(user) });
     });
 }
@@ -146,7 +142,7 @@ function reAuthoriatzion(req, res) {
 /**
  * Checks if the http request contains a valid authorization header
  */
-function verifyAuthorization(req, res, next) {
+export function verifyAuthorization(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
@@ -169,7 +165,7 @@ function verifyAuthorization(req, res, next) {
 /**
  * Generates a valid JSON Web Token
  */
-function generateJWT(user) {
+export function generateJWT(user: IUser): string {
     const header = {
         alg: ALGORITHM,
         typ: 'JWT'
@@ -191,20 +187,29 @@ function generateJWT(user) {
 
 /**
  * Decodes the payload of the received JWT
+ *
+ * TODO Add valid typing for payload
  */
-function getPayload(req) {
+export function getPayload(req: Request): { id: string } {
     const authHeader = req.headers.authorization;
-    const [, token] = authHeader && authHeader.split(' ');
 
+    if (!authHeader) {
+        throw new Error('Missing Authorization');
+    }
+
+    const [, token] = authHeader.split(' ');
     const [, payload, _] = token.split('.');
 
     return JSON.parse(base64url.decode(payload));
 }
 
+export function hashPassword(password: string, salt: string) {
+    return crypto.pbkdf2Sync(password, salt, ITERATIONS, 256, 'sha256');
+}
 /**
  *
  */
-function validateJWT(jwt) {
+export function validateJWT(jwt: string): boolean {
     const splittedJWT = jwt.split('.');
 
     if (splittedJWT.length !== 3) {
@@ -244,7 +249,7 @@ function validateJWT(jwt) {
 /**
  * Validates if the given string is a valid JSON
  */
-function validateJSON(json) {
+export function validateJSON(json: string): boolean {
     try {
         return !!JSON.parse(json);
     } catch (e) {
@@ -252,9 +257,8 @@ function validateJSON(json) {
     }
 }
 
-module.exports.login = login;
-module.exports.registration = registration;
-module.exports.verifyAuthorization = verifyAuthorization;
-module.exports.reAuthoriatzion = reAuthoriatzion;
-module.exports.changePassword = changePassword;
-module.exports.getUserRoles = getUserRoles;
+router.post('/auth/login', login);
+router.put('/auth/registration', registration);
+router.get('/auth/re-authorization', verifyAuthorization, reAuthoriatzion);
+
+export default router;

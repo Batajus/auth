@@ -1,14 +1,18 @@
-const { update } = require('./schemas/feature');
-const Feature = require('./schemas/feature');
-const auth = require('./auth');
-const mongodb = require('mongodb');
+import { Request, Response } from 'express';
+import express from 'express';
+
+const router = express.Router();
+
+import Feature from './schemas/feature';
+
+import { getUserRoles } from './auth';
 
 /**
- *
+ * Load all stored features
  */
-function loadFeatures(req, res) {
+function loadFeatures(req: Request, res: Response) {
     // TODO Implement Paging
-    Feature.find({}).then((features) => {
+    return Feature.find({}).then((features) => {
         res.send(JSON.stringify(features));
     });
 }
@@ -16,7 +20,7 @@ function loadFeatures(req, res) {
 /**
  * Stores the newly created feature in the database
  */
-function createFeature(req, res) {
+function createFeature(req: Request, res: Response) {
     // TODO extract all checks of this kind into a separate function
     if (!req.body || !Object.keys(req.body).length) {
         return res.sendStatus(500);
@@ -47,7 +51,7 @@ function createFeature(req, res) {
 /**
  * Updates existing feature
  */
-function updateFeature(req, res) {
+function updateFeature(req: Request, res: Response) {
     // TODO extract all checks of this kind into a separate function
     if (!req.body || !Object.keys(req.body).length) {
         return res.sendStatus(500);
@@ -55,13 +59,17 @@ function updateFeature(req, res) {
 
     return Feature.findById(req.params.id)
         .then((feature) => {
+            if (!feature) {
+                throw new Error(`No Featur found for ${req.params.id}`);
+            }
+
             Object.assign(feature, req.body);
 
             return feature.save().then(() => {
                 res.send({ successful: true });
             });
         })
-        .catch((err) => {
+        .catch((err: Error) => {
             console.error(err);
             return res.sendStatus(500);
         });
@@ -70,17 +78,18 @@ function updateFeature(req, res) {
 /**
  * Deletes the given feature
  */
-function deleteFeature(req, res) {
-    return auth.getUserRoles(req).then((roles) => {
+function deleteFeature(req: Request, res: Response) {
+    return getUserRoles(req).then((roles) => {
         if (!roles.length || !roles.some((r) => r.name === 'admin')) {
-            return res.sendStatus(403);
+            res.sendStatus(403);
+            return;
         }
 
         return Feature.deleteOne({ _id: req.params.id }).then(
             () => {
                 res.send({ successful: true });
             },
-            (err) => {
+            (err: Error) => {
                 console.error(err);
                 res.sendStatus(501);
             }
@@ -88,7 +97,9 @@ function deleteFeature(req, res) {
     });
 }
 
-module.exports.loadFeatures = loadFeatures;
-module.exports.createFeature = createFeature;
-module.exports.updateFeature = updateFeature;
-module.exports.deleteFeature = deleteFeature;
+router.get('/', loadFeatures);
+router.put('/', createFeature);
+router.post('/:id', updateFeature);
+router.delete('/:id', deleteFeature);
+
+export default router;
